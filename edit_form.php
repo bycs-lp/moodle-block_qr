@@ -41,9 +41,10 @@ class block_qr_edit_form extends block_edit_form {
         $cm = get_fast_modinfo($courseid);
 
         $courselist = [];
-        foreach ($cm->sections as $sectionnum => $section) {
-            $sectioninfo = $cm->get_section_info($sectionnum);
-            $cmid = 'section=' . $sectionnum;
+        $modinfo = get_fast_modinfo($courseid);
+        $allsections = $modinfo->get_section_info_all();
+        foreach ($allsections as $sectionnum => $sectioninfo) {
+            $sectionid = 'section=' . $sectionnum;
             $name = $sectioninfo->name;
             if (empty($name)) {
                 if ($sectionnum == 0) {
@@ -53,12 +54,15 @@ class block_qr_edit_form extends block_edit_form {
                 }
             }
 
-            $courselist[$cmid] = '--- ' . $name . ' ---';
-            foreach ($section as $cmid) {
-                $module = $cm->get_cm($cmid);
-                // Get only course modules which are not deleted.
-                if ($module->deletioninprogress == 0) {
-                    $courselist['cmid=' . $cmid] = $module->name;
+            $courselist[$sectionid] = '--- ' . $name . ' ---';
+            // Get all activities in this section.
+            if (!empty($modinfo->sections[$sectionnum])) {
+                foreach ($modinfo->sections[$sectionnum] as $cmid) {
+                    $module = $modinfo->cms[$cmid];
+                    // Get only course modules which are not deleted.
+                    if ($module->deletioninprogress == 0) {
+                        $courselist['cmid=' . $cmid] = $module->name;
+                    }
                 }
             }
         }
