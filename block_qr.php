@@ -155,7 +155,7 @@ class block_qr extends block_base {
                     case 'section':
                         try {
                             $sectioninfo = $modinfo->get_section_info($id, MUST_EXIST);
-                            // Section must not be "hidden" or "deleted".
+                                // Section must not be "hidden" or "deleted".
                             if (!$sectioninfo->uservisible && !$this->user_can_edit()) {
                                 $this->content->text = get_string('errorsectionnotavailable', 'block_qr');
                                 return $this->content;
@@ -168,22 +168,18 @@ class block_qr extends block_base {
                             return $this->content;
                         }
                         $description = $sectioninfo->name;
-                        if (empty($name)) {
+                        if (empty($description)) {
                             if ($id == 0) {
                                 $description = get_string('general');
                             } else {
                                 $description = get_string('section') . ' ' . $id;
                             }
                         }
-
-                        $originalsectionid = $sectioninfo->id;
-
-                        $qrcodecontent = new moodle_url('/course/view.php', [
-                            'id' => $context->courseid,
-                            'sectionid' => $originalsectionid,
-                        ]);
-                        $qrcodelink = $qrcodecontent;
-                        break;
+                            $qrcodecontent = new moodle_url('/course/section.php', [
+                                'id' => $sectioninfo->id,
+                            ]);
+                            $qrcodelink = $qrcodecontent;
+                            break;
                 }
                 break;
             case 'owncontent':
