@@ -167,12 +167,14 @@ class block_qr extends block_base {
                             }
                             return $this->content;
                         }
-                        $description = $sectioninfo->name;
-                        if (empty($description)) {
-                            if ($id == 0) {
-                                $description = get_string('general');
-                            } else {
-                                $description = get_string('section') . ' ' . $id;
+                        if (!is_null($sectioninfo)) {
+                            $description = $sectioninfo->name;
+                            if (empty($description)) {
+                                if ($id == 0) {
+                                    $description = get_string('general');
+                                } else {
+                                    $description = get_string('section') . ' ' . $id;
+                                }
                             }
                         }
                             $qrcodecontent = new moodle_url('/course/section.php', [
