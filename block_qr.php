@@ -158,7 +158,7 @@ class block_qr extends block_base {
                         } catch (\Throwable $t) {
                             try {
                                 $sectioninfo = $modinfo->get_section_info((int)$id, MUST_EXIST);
-                            }  catch (moodle_exception $e) {
+                            } catch (moodle_exception $e) {
                                 // Section setup in block config does not exist.
                                 if ($this->user_can_edit()) {
                                     $this->content->text = get_string('errorsectionnotavailable', 'block_qr');
