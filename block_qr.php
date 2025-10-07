@@ -153,34 +153,47 @@ class block_qr extends block_base {
                         }
                     break;
                     case 'section':
-                        try {
-                            $sectioninfo = $modinfo->get_section_info_by_id((int)$id);
-                        } catch (\Throwable $t) {
+                        $sectioninfo = null;
+                        if (method_exists($modinfo, 'get_section_info_by_id')) {
+                            try {
+                                $sectioninfo = $modinfo->get_section_info_by_id((int)$id);
+                            } catch (\Throwable $t) {
+                                $sectioninfo = null;
+                            }
+                        }
+                        if (!$sectioninfo) {
                             try {
                                 $sectioninfo = $modinfo->get_section_info((int)$id, MUST_EXIST);
                             } catch (moodle_exception $e) {
-                                // Section setup in block config does not exist.
-                                if ($this->user_can_edit()) {
-                                    $this->content->text = get_string('errorsectionnotavailable', 'block_qr');
+                                if (!$sectioninfo) {
+                                    if ($this->user_can_edit()) {
+                                        $description = get_string('errorsectionnotavailable', 'block_qr');
+                                    } else {
+                                        $description = get_string('courseurl', 'block_qr');
+                                    }
+                                    $qrcodecontent = new moodle_url('/course/view.php', ['id' => $context->courseid]);
+                                    $qrcodelink = $qrcodecontent;
+                                    break;
                                 }
-                                return $this->content;
                             }
                         }
-                        // Section must not be "hidden" or "deleted".
+
                         if (!$sectioninfo->uservisible && !$this->user_can_edit()) {
-                            $this->content->text = get_string('errorsectionnotavailable', 'block_qr');
-                            return $this->content;
+                            $description = get_string('courseurl', 'block_qr');
+                            $qrcodecontent = new moodle_url('/course/view.php', ['id' => $context->courseid]);
+                            $qrcodelink = $qrcodecontent;
+                            break;
                         }
-                        if (!is_null($sectioninfo)) {
-                            $description = $sectioninfo->name;
-                            if (empty($description)) {
-                                if ((int)$sectioninfo->section === 0) {
-                                    $description = get_string('general');
-                                } else {
-                                    $description = get_string('section') . ' ' . $sectioninfo->section;
-                                }
+
+                        $description = $sectioninfo->name;
+                        if (empty($description)) {
+                            if ((int)$sectioninfo->section === 0) {
+                                $description = get_string('general');
+                            } else {
+                                $description = get_string('section') . ' ' . $sectioninfo->section;
                             }
                         }
+
                         $qrcodecontent = new moodle_url('/course/section.php', [
                             'id' => $sectioninfo->id,
                         ]);
