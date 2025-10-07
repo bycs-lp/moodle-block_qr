@@ -46,7 +46,8 @@ class block_qr_edit_form extends block_edit_form {
         $modinfo = get_fast_modinfo($courseid);
         $allsections = $modinfo->get_section_info_all();
         foreach ($allsections as $sectionnum => $sectioninfo) {
-            $sectionid = 'section=' . $sectionnum;
+            // Store section id so links survive reodering/deletions.
+            $sectionid = 'section=' . $sectioninfo->id;
             $name = $courseformat->get_section_name($sectioninfo);
             if (empty($name)) {
                 if ($sectionnum == 0) {
