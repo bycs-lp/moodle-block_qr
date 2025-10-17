@@ -15,6 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 use core\exception\moodle_exception;
+use block_qr\output\mode_currenturl;
+use block_qr\output\mode_courseurl;
+use block_qr\output\mode_section;
+use block_qr\output\mode_cmid;
+use block_qr\output\mode_owncontent;
+use block_qr\output\mode_event;
+use block_qr\output\mode_geolocation;
+use block_qr\output\mode_wifi;
 
 /**
  * Class block_qr
@@ -58,7 +66,7 @@ class block_qr extends block_base {
       * @return stdClass
       */
     public function get_content() {
-        global $CFG, $OUTPUT, $USER;
+        global $CFG, $USER, $OUTPUT;
         if ($this->content !== null) {
             return $this->content;
         }
@@ -87,258 +95,107 @@ class block_qr extends block_base {
             }
         }
 
-        $format = core_courseformat\base::instance($context->courseid);
-
-        $description = null;
-        $qrcodecontent = null;
-        $qrurl = false;
-        $qrcodelink = null;
-        $geocoordinates = null;
-        $calendar = false;
-        $calendarsummary = null;
-        $calendarlocation = null;
-        $calendarstart = null;
-        $calendarend = null;
-        $fullview = false;
-        $svgsize = null;
-        $wifiauthentication = null;
-        $wifissid = null;
-        $wifipasskey = null;
-
+        $renderable = null;
+        
         switch ($this->config->options) {
             case 'currenturl':
-                $qrcodecontent = $this->page->url;
-                $description = get_string('thisurl', 'block_qr');
-                $qrcodelink = $qrcodecontent;
-                $qrurl = true;
-                $calendar = false;
+                $renderable = new mode_currenturl($this->page->url);
                 break;
+
             case 'courseurl':
-                $qrcodecontent = (
-                    new moodle_url(
-                    '/course/view.php',
-                        ['id' => $context->courseid]
-                    )
+                $renderable = new mode_courseurl(
+                        $context->courseid,
+                        $this->config->courseurldesc ?? null
                 );
-                $qrcodelink = $qrcodecontent;
-                $description = $this->config->courseurldesc;
-                $qrurl = true;
-                $calendar = false;
                 break;
+
             case 'internalcontent':
                 list($type, $id) = explode('=', $this->config->internal);
-                $qrurl = true;
-                $calendar = false;
                 switch ($type) {
                     case 'cmid':
-                        try {
-                            $module = $modinfo->get_cm($id);
-                        } catch (moodle_exception $e) {
-                            // Module setup in block config does not exist.
-                            if ($this->user_can_edit()) {
-                                $this->content->text = get_string('errormodulenotavailable', 'block_qr');
-                            }
-                            return $this->content;
-                        }
-                        if (!is_null($module->get_url())) {
-                            $description = $module->name;
-                            $qrcodecontent = $module->url;
-                            $qrcodelink = $qrcodecontent;
-                        } else {
-                            $description = $module->name;
-                            $qrcodecontent = $format->get_view_url($module->section);
-                            $anchor = 'module-' . $id;
-                            $qrcodecontent->set_anchor($anchor);
-                            $qrcodelink = $qrcodecontent;
-                        }
-                    break;
+                        $renderable = new mode_cmid(
+                                $modinfo,
+                                (int)$id,
+                                $this->user_can_edit()
+                        );
+                        break;
                     case 'section':
-                        $sectioninfo = null;
-                        if (method_exists($modinfo, 'get_section_info_by_id')) {
-                            try {
-                                $sectioninfo = $modinfo->get_section_info_by_id((int)$id);
-                            } catch (\Throwable $t) {
-                                $sectioninfo = null;
-                            }
-                        }
-                        if (!$sectioninfo) {
-                            try {
-                                $sectioninfo = $modinfo->get_section_info((int)$id, MUST_EXIST);
-                            } catch (moodle_exception $e) {
-                                if (!$sectioninfo) {
-                                    if ($this->user_can_edit()) {
-                                        $description = get_string('errorsectionnotavailable', 'block_qr');
-                                    } else {
-                                        $description = get_string('courseurl', 'block_qr');
-                                    }
-                                    $qrcodecontent = new moodle_url('/course/view.php', ['id' => $context->courseid]);
-                                    $qrcodelink = $qrcodecontent;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (!$sectioninfo->uservisible && !$this->user_can_edit()) {
-                            $description = get_string('courseurl', 'block_qr');
-                            $qrcodecontent = new moodle_url('/course/view.php', ['id' => $context->courseid]);
-                            $qrcodelink = $qrcodecontent;
-                            break;
-                        }
-
-                        $description = $sectioninfo->name;
-                        if (empty($description)) {
-                            if ((int)$sectioninfo->section === 0) {
-                                $description = get_string('general');
-                            } else {
-                                $description = get_string('section') . ' ' . $sectioninfo->section;
-                            }
-                        }
-
-                        $qrcodecontent = new moodle_url('/course/section.php', [
-                            'id' => $sectioninfo->id,
-                        ]);
-                        $qrcodelink = $qrcodecontent;
+                        $renderable = new mode_section(
+                                $modinfo,
+                                (int)$id,
+                                $this->user_can_edit()
+                        );
                         break;
                 }
                 break;
+
             case 'owncontent':
-                $url = $this->config->owncontent;
-                $description = "";
-                $qrcodecontent = $url;
-                $qrcodelink = $qrcodecontent;
-                if (filter_var($qrcodecontent, FILTER_VALIDATE_URL) === false) {
-                    $qrurl = false;
-                } else {
-                    $qrurl = true;
-                    $calendar = false;
-                }
+                $renderable = new mode_owncontent($this->config->owncontent ?? '');
                 break;
 
             case 'event':
-                $qrcodecontent = "BEGIN:VCALENDAR" . '\n';
-                $qrcodecontent .= "VERSION:2.0" . '\n';
-                $qrcodecontent .= "BEGIN:VEVENT" . '\n';
-                $qrcodecontent .= "SUMMARY:" . $this->config->event_summary . '\n';
-                $qrcodecontent .= "LOCATION:" . $this->config->event_location . '\n';
-                switch ($this->config->allday) {
-                    case '0':
-                        $dateformat = get_string('strftimedate', 'block_qr');
-                        $timeformat = get_string('strftimedatetime', 'block_qr');
-                        $qrcodecontent .= "DTSTART:" . date('Ymd\THis', $this->config->event_start) . '\n';
-                        $qrcodecontent .= "DTEND:" . date('Ymd\THis', $this->config->event_end) . '\n';
-                        if (date('ymd', $this->config->event_end) != date('ymd', $this->config->event_start)) {
-                            $calendarstart = date($dateformat, $this->config->event_start) . " - ";
-                            $calendarend = date($dateformat, $this->config->event_end);
-                        } else {
-                            $calendarstart = date($dateformat, $this->config->event_start) . " - ";
-                            $calendarend = date($timeformat, $this->config->event_end);
-                        }
-                        break;
-                    case '1':
-                        $dateformat = get_string('strftimedateallday', 'block_qr');
-                        $timeformat = get_string('strftimedatetime', 'block_qr');
-                        $qrcodecontent .= "DTSTART:" . date('Ymd', $this->config->event_start) . '\n';
-                        $qrcodecontent .= "DTEND:" . date('Ymd', $this->config->event_end) . '\n';
-                        if (date('ymd', $this->config->event_end) != date('ymd', $this->config->event_start)) {
-                            $calendarstart = date($dateformat, $this->config->event_start) . " - ";
-                            $calendarend = date($dateformat, $this->config->event_end);
-                        } else {
-                            $calendarstart = date($dateformat, $this->config->event_start);
-                            $calendarend = null;
-                        }
-                }
-                $qrcodecontent .= "END:VEVENT" . '\n';
-                $qrcodecontent .= "END:VCALENDAR" . '\n';
-                $description = get_string('event', 'block_qr');
-                $calendarsummary = $this->config->event_summary;
-                $calendarlocation = $this->config->event_location;
-                $qrurl = false;
-                $calendar = true;
-                $fullview = false;
+                $renderable = new mode_event(
+                        $this->config->event_summary ?? '',
+                        $this->config->event_location ?? '',
+                        $this->config->event_start ?? 0,
+                        $this->config->event_end ?? 0,
+                        $this->config->allday ?? 0
+                );
                 break;
 
             case 'geolocation':
-                $qrcodecontent = "geo:" . $this->config->geolocation_br . "," . $this->config->geolocation_lng;
-                $description = get_string('geolocation', 'block_qr');
-                $geocoordinates = $this->config->geolocation_br . ', ' . $this->config->geolocation_lng;
-                $calendar = false;
-                switch ($this->config->link) {
-                    case 'nolink':
-                        $qrurl = false;
-                        break;
-                    case 'osm':
-                        $qrcodelink = 'https://www.openstreetmap.org/?mlat=';
-                        $qrcodelink .= $this->config->geolocation_br . '&mlon=' . $this->config->geolocation_lng;
-                        $qrcodelink .= '#map=10/' . $this->config->geolocation_br . '/' . $this->config->geolocation_lng;
-                        $qrurl = true;
-                }
+                $renderable = new mode_geolocation(
+                        $this->config->geolocation_br ?? '',
+                        $this->config->geolocation_lng ?? '',
+                        $this->config->link ?? 'nolink'
+                );
                 break;
 
             case 'wifi':
-                $qrcodecontent = "WIFI:T:" . $this->config->wifiauthentication;
-                $qrcodecontent .= ";S:" .  $this->config->wifissid;
-                $qrcodecontent .= ";P:" . $this->config->wifipasskey;
-                $qrcodecontent .= ";H:" . $this->config->wifissidoptions . ";";
-                $description .= get_string('wifi', 'block_qr');
-                $wifiauthentication = $this->config->wifiauthentication;
-                $wifissid = $this->config->wifissid;
-                $wifipasskey = $this->config->wifipasskey;
+                $renderable = new mode_wifi(
+                        $this->config->wifiauthentication ?? '',
+                        $this->config->wifissid ?? '',
+                        $this->config->wifipasskey ?? '',
+                        $this->config->wifissidoptions ?? ''
+                );
                 break;
         }
-
-        // Short link option only in edit mode.
-        if (empty($USER->editing)) {
-            $fullview = false;
-        } else {
-            $fullview = true;
+        
+        if ($renderable === null) {
+            return $this->content;
         }
-
-        // Short link url in admin settings.
-        $configshortlink = get_config('block_qr', 'configshortlink');
-
-        // Short link service.
-        if (empty($configshortlink)) {
-            $urlshort = null;
+        $data = $renderable->export_for_template($OUTPUT);
+        $content = $OUTPUT->render($renderable);
+        
+        if (empty($USER->editing)) {
+            $data['fullview'] = false;
         } else {
-            if ($qrcodelink !== null) {
-                $encodedqrcodelink = urlencode($qrcodelink);
-                $urlshort = str_replace('SHORTLINK', $encodedqrcodelink, $configshortlink);
+            $data['fullview'] = true;
+        }
+        
+        $configshortlink = get_config('block_qr', 'configshortlink');
+        $data['configshortlink'] = $configshortlink;
+        
+        if (empty($configshortlink)) {
+            $data['urlshort'] = null;
+        } else {
+            if (isset($data['qrcodelink']) && $data['qrcodelink'] !== null) {
+                $encodedqrcodelink = urlencode($data['qrcodelink']);
+                $data['urlshort'] = str_replace('SHORTLINK', $encodedqrcodelink, $configshortlink);
             } else {
-                $urlshort = null;
+                $data['urlshort'] = null;
             }
         }
 
-        // Size of QR code.
-        if (isset($this->config->size)) {
-            $svgsize = $this->config->size;
+        if (array_key_exists('qrcodecontent', $data) && $data['qrcodecontent'] !== null) {
+            $data['qrcodecontent_json'] = json_encode($data['qrcodecontent'], JSON_UNESCAPED_SLASHES);
         }
 
-        // Use for multiple id for multiple QR codes on one page.
-        $blockid = $this->context->id;
+        $data['size'] = $this->config->size ?? null;
+        $data['id'] = $this->context->id;
+        $data['javascript'] = $CFG->wwwroot . '/blocks/qr/js/qrcode.min.js';
+        $data['subcontent'] = $content;
 
-        $javascripturl = $CFG->wwwroot . '/blocks/qr/js/qrcode.min.js';
-
-        $data = [
-            'qrcodecontent' => is_object($qrcodecontent) ? $qrcodecontent->out(false) : $qrcodecontent,
-            'description' => $description,
-            'javascript' => $javascripturl,
-            'size' => $svgsize,
-            'id' => $blockid,
-            'geocoordinates' => $geocoordinates,
-            'qrurl' => $qrurl,
-            'calendar' => $calendar,
-            'calendarsummary' => $calendarsummary,
-            'calendarlocation' => $calendarlocation,
-            'calendarstart' => $calendarstart,
-            'calendarend' => $calendarend,
-            'qrcodelink' => is_object($qrcodelink) ? $qrcodelink->out(false) : $qrcodelink,
-            'urlshort' => $urlshort,
-            'fullview' => $fullview,
-            'configshortlink' => $configshortlink,
-            'wifiauthentication' => $wifiauthentication,
-            'wifissid' => $wifissid,
-            'wifipasskey' => $wifipasskey,
-        ];
         $this->content->text = $OUTPUT->render_from_template('block_qr/qr', $data);
         return $this->content;
     }
