@@ -61,7 +61,8 @@ class mode_geolocation implements \renderable, \templatable {
         if ($this->linktype === 'osm') {
             $link = 'https://www.openstreetmap.org/?mlat=' . $this->lat
                 . '&mlon=' . $this->lng
-                . '#map=10/' . $this->lat . '/' . $this->lng;        }
+                . '#map=10/' . $this->lat . '/' . $this->lng;
+        }
         return [
             'description' => get_string('geolocation', 'block_qr'),
             'qrurl' => $link !== null,
