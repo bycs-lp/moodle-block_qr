@@ -70,7 +70,7 @@ class block_qr extends block_base {
             return $this->content;
         }
 
-        $this->content = new stdClass;
+        $this->content = new stdClass();
         $this->content->text = '';
         $this->content->footer = '';
 
@@ -78,8 +78,8 @@ class block_qr extends block_base {
             return $this->content;
         }
 
-        $this->content = new stdClass;
-        $context = new stdClass;
+        $this->content = new stdClass();
+        $context = new stdClass();
 
         if ($this->page->course) {
             $context->courseid = $this->page->course->id;

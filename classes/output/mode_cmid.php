@@ -105,7 +105,7 @@ class mode_cmid implements \renderable, \templatable {
             $url = $cm->url;
         } else {
             $url = new moodle_url('/course/view.php', [
-                'id' => $this->modinfo->get_course_id()
+                'id' => $this->modinfo->get_course_id(),
             ]);
             $url->set_anchor('module-' . $this->cmid);
         }
