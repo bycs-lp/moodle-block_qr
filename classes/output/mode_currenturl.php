@@ -25,7 +25,8 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Thomas Schönlein
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mode_currenturl implements \renderable, \templatable {
+class mode_currenturl implements \renderable, \templatable
+{
     /** @var \moodle_url */
     private $url;
 
@@ -33,7 +34,8 @@ class mode_currenturl implements \renderable, \templatable {
      *
      * @param \moodle_url $url
      */
-    public function __construct(\moodle_url $url) {
+    public function __construct(\moodle_url $url)
+    {
         $this->url = $url;
     }
 
@@ -43,13 +45,14 @@ class mode_currenturl implements \renderable, \templatable {
      * @return array
      * @throws \coding_exception
      */
-    public function export_for_template($output): array {
+    public function export_for_template($output): array
+    {
         $href = $this->url->out(false);
         return [
-            'description'   => get_string('thisurl', 'block_qr'),
-            'qrurl'         => true,
+            'description' => get_string('thisurl', 'block_qr'),
+            'qrurl' => true,
             'qrcodecontent' => $href,
-            'qrcodelink'    => $href,
+            'qrcodelink' => $href,
         ];
     }
 }

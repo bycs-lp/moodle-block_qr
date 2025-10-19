@@ -25,7 +25,8 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Thomas Schönlein
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mode_event implements \renderable, \templatable {
+class mode_event implements \renderable, \templatable
+{
     /**
      * @var string Discription of the event
      */
@@ -55,7 +56,8 @@ class mode_event implements \renderable, \templatable {
      * @param int $end
      * @param int $allday
      */
-    public function __construct(string $summary, string $location, int $start, int $end, int $allday) {
+    public function __construct(string $summary, string $location, int $start, int $end, int $allday)
+    {
         $this->summary = $summary;
         $this->location = $location;
         $this->start = $start;
@@ -69,7 +71,8 @@ class mode_event implements \renderable, \templatable {
      * @return array
      * @throws \coding_exception
      */
-    public function export_for_template($output): array {
+    public function export_for_template($output): array
+    {
         $qrcodecontent = "BEGIN:VCALENDAR\n";
         $qrcodecontent .= "VERSION:2.0\n";
         $qrcodecontent .= "BEGIN:VEVENT\n";

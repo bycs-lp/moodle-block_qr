@@ -25,7 +25,8 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Thomas Schönlein
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mode_geolocation implements \renderable, \templatable {
+class mode_geolocation implements \renderable, \templatable
+{
     /**
      * @var string Latitude
      */
@@ -45,7 +46,8 @@ class mode_geolocation implements \renderable, \templatable {
      * @param string $lng
      * @param string|null $linktype
      */
-    public function __construct(string $lat, string $lng, ?string $linktype) {
+    public function __construct(string $lat, string $lng, ?string $linktype)
+    {
         $this->lat = $lat;
         $this->lng = $lng;
         $this->linktype = $linktype;
@@ -57,18 +59,19 @@ class mode_geolocation implements \renderable, \templatable {
      * @return array
      * @throws \coding_exception
      */
-    public function export_for_template($output): array {
+    public function export_for_template($output): array
+    {
         $geo = "geo:{$this->lat},{$this->lng}";
         $link = null;
         if ($this->linktype === 'osm') {
-            $link = 'https://www.openstreetmap.org/?mlat='.$this->lat.'&mlon='.$this->lng.'#map=10/'.$this->lat.'/'.$this->lng;
+            $link = 'https://www.openstreetmap.org/?mlat=' . $this->lat . '&mlon=' . $this->lng . '#map=10/' . $this->lat . '/' . $this->lng;
         }
         return [
-            'description'   => get_string('geolocation', 'block_qr'),
-            'qrurl'         => $link !== null,
+            'description' => get_string('geolocation', 'block_qr'),
+            'qrurl' => $link !== null,
             'qrcodecontent' => $geo,
-            'qrcodelink'    => $link,
-            'geocoordinates'=> "{$this->lat}, {$this->lng}",
+            'qrcodelink' => $link,
+            'geocoordinates' => "{$this->lat}, {$this->lng}",
         ];
     }
 }

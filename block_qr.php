@@ -32,11 +32,13 @@ use block_qr\output\mode_wifi;
  * @author     Florian Dagner <florian.dagner@outlook.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_qr extends block_base {
+class block_qr extends block_base
+{
     /**
      * Sets the block title.
      */
-    public function init(): void {
+    public function init(): void
+    {
         $this->title = get_string('pluginname', 'block_qr');
     }
 
@@ -45,26 +47,29 @@ class block_qr extends block_base {
      *
      * @return bool
      */
-    public function has_config(): bool {
+    public function has_config(): bool
+    {
         return true;
     }
 
     /**
      * Create default config.
      */
-    public function instance_create(): bool {
+    public function instance_create(): bool
+    {
         $this->config = new stdClass();
         $this->config->options = 'currenturl';
         $this->instance_config_save($this->config);
         return true;
     }
 
-     /**
-      * Returns the contents.
-      *
-      * @return stdClass
-      */
-    public function get_content() {
+    /**
+     * Returns the contents.
+     *
+     * @return stdClass
+     */
+    public function get_content()
+    {
         global $CFG, $USER, $OUTPUT;
         if ($this->content !== null) {
             return $this->content;
@@ -95,7 +100,7 @@ class block_qr extends block_base {
         }
 
         $renderable = null;
-        
+
         switch ($this->config->options) {
             case 'currenturl':
                 $renderable = new mode_currenturl($this->page->url);
@@ -103,8 +108,8 @@ class block_qr extends block_base {
 
             case 'courseurl':
                 $renderable = new mode_courseurl(
-                        $context->courseid,
-                        $this->config->courseurldesc ?? null
+                    $context->courseid,
+                    $this->config->courseurldesc ?? null
                 );
                 break;
 
@@ -113,16 +118,16 @@ class block_qr extends block_base {
                 switch ($type) {
                     case 'cmid':
                         $renderable = new mode_cmid(
-                                $modinfo,
-                                (int)$id,
-                                $this->user_can_edit()
+                            $modinfo,
+                            (int)$id,
+                            $this->user_can_edit()
                         );
                         break;
                     case 'section':
                         $renderable = new mode_section(
-                                $modinfo,
-                                (int)$id,
-                                $this->user_can_edit()
+                            $modinfo,
+                            (int)$id,
+                            $this->user_can_edit()
                         );
                         break;
                 }
@@ -134,47 +139,47 @@ class block_qr extends block_base {
 
             case 'event':
                 $renderable = new mode_event(
-                        $this->config->event_summary ?? '',
-                        $this->config->event_location ?? '',
-                        $this->config->event_start ?? 0,
-                        $this->config->event_end ?? 0,
-                        $this->config->allday ?? 0
+                    $this->config->event_summary ?? '',
+                    $this->config->event_location ?? '',
+                    $this->config->event_start ?? 0,
+                    $this->config->event_end ?? 0,
+                    $this->config->allday ?? 0
                 );
                 break;
 
             case 'geolocation':
                 $renderable = new mode_geolocation(
-                        $this->config->geolocation_br ?? '',
-                        $this->config->geolocation_lng ?? '',
-                        $this->config->link ?? 'nolink'
+                    $this->config->geolocation_br ?? '',
+                    $this->config->geolocation_lng ?? '',
+                    $this->config->link ?? 'nolink'
                 );
                 break;
 
             case 'wifi':
                 $renderable = new mode_wifi(
-                        $this->config->wifiauthentication ?? '',
-                        $this->config->wifissid ?? '',
-                        $this->config->wifipasskey ?? '',
-                        $this->config->wifissidoptions ?? ''
+                    $this->config->wifiauthentication ?? '',
+                    $this->config->wifissid ?? '',
+                    $this->config->wifipasskey ?? '',
+                    $this->config->wifissidoptions ?? ''
                 );
                 break;
         }
-        
+
         if ($renderable === null) {
             return $this->content;
         }
         $data = $renderable->export_for_template($OUTPUT);
         $content = $OUTPUT->render($renderable);
-        
+
         if (empty($USER->editing)) {
             $data['fullview'] = false;
         } else {
             $data['fullview'] = true;
         }
-        
+
         $configshortlink = get_config('block_qr', 'configshortlink');
         $data['configshortlink'] = $configshortlink;
-        
+
         if (empty($configshortlink)) {
             $data['urlshort'] = null;
         } else {
@@ -204,7 +209,8 @@ class block_qr extends block_base {
      *
      * @return array
      */
-    public function applicable_formats() {
+    public function applicable_formats()
+    {
         return ['all' => true];
     }
 
@@ -213,7 +219,8 @@ class block_qr extends block_base {
      *
      * @return boolean
      */
-    public function instance_allow_multiple() {
+    public function instance_allow_multiple()
+    {
         return true;
     }
 }

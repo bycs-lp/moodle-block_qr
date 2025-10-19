@@ -27,7 +27,8 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Thomas Schönlein
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mode_section implements \renderable, \templatable {
+class mode_section implements \renderable, \templatable
+{
     /**
      * @var \course_modinfo Mode type
      */
@@ -47,9 +48,10 @@ class mode_section implements \renderable, \templatable {
      * @param int $sectionid
      * @param bool $usercanedit
      */
-    public function __construct(\course_modinfo $modinfo, int $sectionid, bool $usercanedit) {
-        $this->modinfo     = $modinfo;
-        $this->sectionid   = $sectionid;
+    public function __construct(\course_modinfo $modinfo, int $sectionid, bool $usercanedit)
+    {
+        $this->modinfo = $modinfo;
+        $this->sectionid = $sectionid;
         $this->usercanedit = $usercanedit;
     }
 
@@ -60,7 +62,8 @@ class mode_section implements \renderable, \templatable {
      * @throws \coding_exception
      * @throws \core\exception\moodle_exception
      */
-    public function export_for_template($output): array {
+    public function export_for_template($output): array
+    {
         $sectioninfo = null;
         try {
             if (method_exists($this->modinfo, 'get_section_info_by_id')) {
@@ -72,17 +75,17 @@ class mode_section implements \renderable, \templatable {
 
         if (!$sectioninfo) {
             return [
-                    'qrurl'         => false,
-                    'qrcodecontent' => '',
-                    'description'   => get_string('errorsectionnotavailable', 'block_qr'),
+                'qrurl' => false,
+                'qrcodecontent' => '',
+                'description' => get_string('errorsectionnotavailable', 'block_qr'),
             ];
         }
 
         if (!$sectioninfo->uservisible && !$this->usercanedit) {
             return [
-                    'qrurl'         => false,
-                    'qrcodecontent' => '',
-                    'description'   => get_string('errorsectionnotavailable', 'block_qr'),
+                'qrurl' => false,
+                'qrcodecontent' => '',
+                'description' => get_string('errorsectionnotavailable', 'block_qr'),
             ];
         }
 
@@ -97,17 +100,17 @@ class mode_section implements \renderable, \templatable {
         }
 
         $format = course_get_format($sectioninfo->course);
-        if($format->get_format()==='tiles') {
+        if ($format->get_format() === 'tiles') {
             $url = new moodle_url('/course/section.php', ['id' => $sectioninfo->id]);
         } else {
             $url = $format->get_view_url($sectioninfo, ['navigation' => true]);
         }
 
         return [
-                'description'   => $description,
-                'qrurl'         => true,
-                'qrcodecontent' => $url->out(false),
-                'qrcodelink'    => $url->out(false),
+            'description' => $description,
+            'qrurl' => true,
+            'qrcodecontent' => $url->out(false),
+            'qrcodelink' => $url->out(false),
         ];
     }
 }
