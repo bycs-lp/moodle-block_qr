@@ -104,14 +104,12 @@ class restore_qr_block_task extends restore_block_task {
 
             if (isset($config->internal)) {
                 [$type, $id] = array_pad(
-                    explode('=',
-                        (string)$this->config->internal,
-                        2),
+                    explode('=', (string) $this->config->internal, 2),
                     2,
                     null
                 );
-                $type = trim((string)$type);
-                $id   = $id !== null ? (int)$id : null;
+                $type = trim((string) $type);
+                $id   = $id !== null ? (int) $id : null;
                 if ($type == 'cmid') {
                     $moduleid = restore_dbops::get_backup_ids_record($this->get_restoreid(), 'course_module', $id);
                     if ($moduleid) {

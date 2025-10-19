@@ -110,14 +110,12 @@ class block_qr extends block_base {
 
             case 'internalcontent':
                 [$type, $id] = array_pad(
-                    explode('=',
-                    (string)$this->config->internal,
-                    2),
+                    explode('=', (string) $this->config->internal, 2),
                     2,
                     null
                 );
-                $type = trim((string)$type);
-                $id   = $id !== null ? (int)$id : null;
+                $type = trim((string) $type);
+                $id   = $id !== null ? (int) $id : null;
                 switch ($type) {
                     case 'cmid':
                         $renderable = new mode_cmid(
