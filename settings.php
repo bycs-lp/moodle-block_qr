@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+global $ADMIN, $settings;
 
 /**
  * Admin settings for block_qr
@@ -31,6 +32,7 @@ if ($ADMIN->fulltree) {
         new lang_string('shortlinkservice', 'block_qr'),
         new lang_string('shortlinkservice_description', 'block_qr'),
         '',
-        PARAM_TEXT)
+        PARAM_TEXT
+        )
     );
 }
