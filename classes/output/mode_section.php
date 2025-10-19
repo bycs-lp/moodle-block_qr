@@ -28,8 +28,17 @@ defined('MOODLE_INTERNAL') || die();
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_section implements \renderable, \templatable {
+    /**
+     * @var \course_modinfo Mode type
+     */
     private \course_modinfo $modinfo;
+    /**
+     * @var int Section ID
+     */
     private int $sectionid;
+    /**
+     * @var bool User can edit
+     */
     private bool $usercanedit;
 
     /**

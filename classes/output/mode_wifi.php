@@ -26,9 +26,21 @@ defined('MOODLE_INTERNAL') || die();
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_wifi implements \renderable, \templatable {
+    /**
+     * @var string Authentication method
+     */
     private string $auth;
+    /**
+     * @var string SSID
+     */
     private string $ssid;
+    /**
+     * @var string Passkey
+     */
     private string $passkey;
+    /**
+     * @var string Hidden network
+     */
     private string $hidden;
 
     /**

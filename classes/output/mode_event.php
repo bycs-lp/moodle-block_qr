@@ -26,10 +26,25 @@ defined('MOODLE_INTERNAL') || die();
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_event implements \renderable, \templatable {
+    /**
+     * @var string Discription of the event
+     */
     private string $summary;
+    /**
+     * @var string Location of the event
+     */
     private string $location;
+    /**
+     * @var int Start time of the event
+     */
     private int $start;
+    /**
+     * @var int End time of the event
+     */
     private int $end;
+    /**
+     * @var int All day event
+     */
     private int $allday;
 
     /**

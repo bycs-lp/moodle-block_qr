@@ -26,9 +26,18 @@ defined('MOODLE_INTERNAL') || die();
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_geolocation implements \renderable, \templatable {
+    /**
+     * @var string Latitude
+     */
     private string $lat;
+    /**
+     * @var string Longitude
+     */
     private string $lng;
-    private ?string $linktype; // 'nolink' | 'osm'
+    /**
+     * @var string|null Link type
+     */
+    private ?string $linktype;
 
     /**
      * mode_geolocation constructor.

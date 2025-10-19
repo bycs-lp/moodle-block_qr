@@ -26,6 +26,9 @@ defined('MOODLE_INTERNAL') || die();
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_owncontent implements \renderable, \templatable {
+    /**
+     * @var string The raw content of the QR code
+     */
     private string $raw;
 
     /**
