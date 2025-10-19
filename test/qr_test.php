@@ -26,13 +26,21 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Thomas Schönlein
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class qr_test extends \advanced_testcase {
-
+final class qr_test extends \advanced_testcase
+{
+    /** @var \stdClass $course */
     private $course;
+    /** @var int $sectionid */
     private $sectionid;
+    /** @var int $cmid */
     private $cmid;
 
-    protected function setUp(): void {
+    /**
+     * Setup test environment
+     * @return void
+     */
+    protected function setUp(): void
+    {
         parent::setUp();
         $this->resetAfterTest(true);
         date_default_timezone_set('UTC');
@@ -45,14 +53,14 @@ final class qr_test extends \advanced_testcase {
         $this->sectionid = $secinfo->id;
 
         $page = $gen->create_module('page', [
-            'course'  => $this->course->id,
+            'course' => $this->course->id,
             'section' => 1,
-            'name'    => 'Testseite',
+            'name' => 'Testseite',
         ]);
         $this->cmid = $page->cmid;
 
         global $CFG;
-        require_once($CFG->dirroot.'/lib/blocklib.php');
+        require_once($CFG->dirroot . '/lib/blocklib.php');
     }
 
     /**
@@ -63,7 +71,8 @@ final class qr_test extends \advanced_testcase {
      * @param array $expect Expected output
      */
     #[DataProvider('get_content_provider')]
-    public function test_get_content(string $mode, array $config, \moodle_url $pageurl, array $expect): void {
+    public function test_get_content(string $mode, array $config, \moodle_url $pageurl, array $expect): void
+    {
         global $PAGE;
 
         $PAGE->set_course($this->course);
@@ -74,24 +83,24 @@ final class qr_test extends \advanced_testcase {
         }
 
         $config['internal'] = strtr($config['internal'], [
-            '__COURSEID__'  => (string)$this->course->id,
+            '__COURSEID__' => (string)$this->course->id,
             '__SECTIONID__' => (string)$this->sectionid,
-            '__CMID__'      => (string)$this->cmid,
+            '__CMID__' => (string)$this->cmid,
         ]);
         foreach ($expect['contains'] as $key => $value) {
             $expect['contains'][$key] = strtr($value, [
-                '__COURSEID__'  => (string)$this->course->id,
+                '__COURSEID__' => (string)$this->course->id,
                 '__SECTIONID__' => (string)$this->sectionid,
-                '__CMID__'      => (string)$this->cmid,
+                '__CMID__' => (string)$this->cmid,
             ]);
         }
 
         $config['options'] = $mode;
         $block = block_instance('qr');
         $block->instance = (object)['id' => 1];
-        $block->config   = (object)$config;
-        $block->page     = $PAGE;
-        $block->context  = \context_system::instance();
+        $block->config = (object)$config;
+        $block->page = $PAGE;
+        $block->context = \context_system::instance();
 
         $content = $block->get_content();
 
@@ -106,7 +115,8 @@ final class qr_test extends \advanced_testcase {
      * dataProvider for test_get_content
      * @return array Sets of data for test_get_content
      */
-    public static function get_content_provider(): array {
+    public static function get_content_provider(): array
+    {
         return [
             'currenturl' => [
                 'currenturl',
@@ -148,11 +158,11 @@ final class qr_test extends \advanced_testcase {
             'event' => [
                 'event',
                 [
-                    'event_summary'  => 'Hackathon',
+                    'event_summary' => 'Hackathon',
                     'event_location' => 'HS06',
-                    'event_start'    => gmmktime(10,0,0,10,15,2025),
-                    'event_end'      => gmmktime(12,0,0,10,17,2025),
-                    'allday'         => 0,
+                    'event_start' => gmmktime(10, 0, 0, 10, 15, 2025),
+                    'event_end' => gmmktime(12, 0, 0, 10, 17, 2025),
+                    'allday' => 0,
                 ],
                 new \moodle_url('/my/courses.php'),
                 [
@@ -170,10 +180,10 @@ final class qr_test extends \advanced_testcase {
             'wifi' => [
                 'wifi',
                 [
-                    'wifissid'           => 'SchoolNet',
-                    'wifipasskey'        => 'secret',
+                    'wifissid' => 'SchoolNet',
+                    'wifipasskey' => 'secret',
                     'wifiauthentication' => 'WPA',
-                    'wifissidoptions'    => 'false',
+                    'wifissidoptions' => 'false',
                 ],
                 new \moodle_url('/my/courses.php'),
                 [
