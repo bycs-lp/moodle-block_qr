@@ -22,7 +22,6 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class mode_courseurl
- *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
@@ -32,12 +31,23 @@ class mode_courseurl implements \renderable, \templatable {
     private int $courseid;
     private ?string $desc;
 
+    /**
+     * Constructor
+     * @param int $courseid
+     * @param string|null $desc
+     */
     public function __construct(int $courseid, ?string $desc) {
         $this->courseid = $courseid;
         $this->desc = $desc;
     }
 
-    public function export_for_template( $output): array {
+    /**
+     * Export for template
+     * @param $output
+     * @return array
+     * @throws \core\exception\moodle_exception
+     */
+    public function export_for_template($output): array {
         $url = new moodle_url('/course/view.php', ['id' => $this->courseid]);
         return [
             'description'   => $this->desc,

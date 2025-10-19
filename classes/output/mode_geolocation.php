@@ -20,7 +20,6 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class mode_geolocation
- *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
@@ -31,12 +30,24 @@ class mode_geolocation implements \renderable, \templatable {
     private string $lng;
     private ?string $linktype; // 'nolink' | 'osm'
 
+    /**
+     * mode_geolocation constructor.
+     * @param string $lat
+     * @param string $lng
+     * @param string|null $linktype
+     */
     public function __construct(string $lat, string $lng, ?string $linktype) {
         $this->lat = $lat;
         $this->lng = $lng;
         $this->linktype = $linktype;
     }
 
+    /**
+     * Export for template
+     * @param $output
+     * @return array
+     * @throws \coding_exception
+     */
     public function export_for_template($output): array {
         $geo = "geo:{$this->lat},{$this->lng}";
         $link = null;

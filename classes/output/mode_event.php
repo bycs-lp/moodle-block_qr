@@ -20,7 +20,6 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class mode_event
- *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
@@ -33,6 +32,14 @@ class mode_event implements \renderable, \templatable {
     private int $end;
     private int $allday;
 
+    /**
+     * mode_event constructor.
+     * @param string $summary
+     * @param string $location
+     * @param int $start
+     * @param int $end
+     * @param int $allday
+     */
     public function __construct(string $summary, string $location, int $start, int $end, int $allday) {
         $this->summary = $summary;
         $this->location = $location;
@@ -41,6 +48,12 @@ class mode_event implements \renderable, \templatable {
         $this->allday = $allday;
     }
 
+    /**
+     * Export for template
+     * @param $output
+     * @return array
+     * @throws \coding_exception
+     */
     public function export_for_template($output): array {
         $qrcodecontent = "BEGIN:VCALENDAR\n";
         $qrcodecontent .= "VERSION:2.0\n";

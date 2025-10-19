@@ -20,7 +20,6 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class mode_owncontent
- *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
@@ -29,11 +28,20 @@ defined('MOODLE_INTERNAL') || die();
 class mode_owncontent implements \renderable, \templatable {
     private string $raw;
 
+    /**
+     * mode_owncontent constructor.
+     * @param string $raw
+     */
     public function __construct(string $raw) {
         $this->raw = trim($raw);
     }
 
-    public function export_for_template( $output): array {
+    /**
+     * Export for template
+     * @param $output
+     * @return array
+     */
+    public function export_for_template($output): array {
         $isurl = filter_var($this->raw, FILTER_VALIDATE_URL) !== false;
         return [
             'description'   => '',

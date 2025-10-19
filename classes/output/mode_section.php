@@ -22,7 +22,6 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class mode_section
- *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
@@ -33,14 +32,26 @@ class mode_section implements \renderable, \templatable {
     private int $sectionid;
     private bool $usercanedit;
 
+    /**
+     * mode_section constructor.
+     * @param \course_modinfo $modinfo
+     * @param int $sectionid
+     * @param bool $usercanedit
+     */
     public function __construct(\course_modinfo $modinfo, int $sectionid, bool $usercanedit) {
         $this->modinfo     = $modinfo;
         $this->sectionid   = $sectionid;
         $this->usercanedit = $usercanedit;
     }
 
+    /**
+     * Export for template
+     * @param $output
+     * @return array
+     * @throws \coding_exception
+     * @throws \core\exception\moodle_exception
+     */
     public function export_for_template($output): array {
-
         $sectioninfo = null;
         try {
             if (method_exists($this->modinfo, 'get_section_info_by_id')) {

@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -55,7 +57,12 @@ final class qr_test extends \advanced_testcase {
 
     /**
      * Tests the QR-Block content
+     * @param string $mode QR-Block mode
+     * @param array $config QR-Block data
+     * @param moodle_url $pageurl Input URL
+     * @param array $expect Expected output
      */
+    #[DataProvider('get_content_provider')]
     public function test_get_content(string $mode, array $config, \moodle_url $pageurl, array $expect): void {
         global $PAGE;
 
@@ -97,6 +104,7 @@ final class qr_test extends \advanced_testcase {
 
     /**
      * dataProvider for test_get_content
+     * @return array Sets of data for test_get_content
      */
     public static function get_content_provider(): array {
         return [

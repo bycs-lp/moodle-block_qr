@@ -20,7 +20,6 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class mode_currenturl
- *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
@@ -30,10 +29,20 @@ class mode_currenturl implements \renderable, \templatable {
     /** @var \moodle_url */
     private $url;
 
+    /**
+     *
+     * @param \moodle_url $url
+     */
     public function __construct(\moodle_url $url) {
         $this->url = $url;
     }
 
+    /**
+     * Export for template
+     * @param $output
+     * @return array
+     * @throws \coding_exception
+     */
     public function export_for_template($output): array {
         $href = $this->url->out(false);
         return [

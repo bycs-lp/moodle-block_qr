@@ -34,13 +34,27 @@ class mode_cmid implements \renderable, \templatable {
     private int $cmid;
     private bool $usercanedit;
 
+    /**
+     * mode_cmid constructor.
+     * @param \course_modinfo $modinfo
+     * @param int $cmid
+     * @param bool $usercanedit
+     */
     public function __construct(\course_modinfo $modinfo, int $cmid, bool $usercanedit) {
         $this->modinfo = $modinfo;
         $this->cmid = $cmid;
         $this->usercanedit = $usercanedit;
     }
 
-    public function export_for_template( $output): array {
+    /**
+     * Export for template
+     * @param $output
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws moodle_exception
+     */
+    public function export_for_template($output): array {
         try {
             $cm = $this->modinfo->get_cm($this->cmid);
         } catch (moodle_exception $e) {

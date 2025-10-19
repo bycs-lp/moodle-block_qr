@@ -20,7 +20,6 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class mode_wifi
- *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
@@ -32,6 +31,13 @@ class mode_wifi implements \renderable, \templatable {
     private string $passkey;
     private string $hidden;
 
+    /**
+     * mode_wifi constructor.
+     * @param string $auth
+     * @param string $ssid
+     * @param string $passkey
+     * @param string $hidden
+     */
     public function __construct(string $auth, string $ssid, string $passkey, string $hidden) {
         $this->auth = $auth;
         $this->ssid = $ssid;
@@ -39,7 +45,13 @@ class mode_wifi implements \renderable, \templatable {
         $this->hidden = $hidden;
     }
 
-    public function export_for_template( $output): array {
+    /**
+     * Export for template
+     * @param $output
+     * @return array
+     * @throws \coding_exception
+     */
+    public function export_for_template($output): array {
         $content = "WIFI:T:{$this->auth};S:{$this->ssid};P:{$this->passkey};H:{$this->hidden};";
         return [
             'description'       => get_string('wifi', 'block_qr'),
