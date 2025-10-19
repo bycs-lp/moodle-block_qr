@@ -30,8 +30,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Thomas Schönlein
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mode_cmid implements \renderable, \templatable
-{
+class mode_cmid implements \renderable, \templatable {
     /**
      * @var \course_modinfo $modinfo Mode type
      */
@@ -51,8 +50,7 @@ class mode_cmid implements \renderable, \templatable
      * @param int $cmid
      * @param bool $usercanedit
      */
-    public function __construct(\course_modinfo $modinfo, int $cmid, bool $usercanedit)
-    {
+    public function __construct(\course_modinfo $modinfo, int $cmid, bool $usercanedit) {
         $this->modinfo = $modinfo;
         $this->cmid = $cmid;
         $this->usercanedit = $usercanedit;
@@ -67,8 +65,7 @@ class mode_cmid implements \renderable, \templatable
      * @throws \dml_exception
      * @throws moodle_exception
      */
-    public function export_for_template($output): array
-    {
+    public function export_for_template($output): array {
         try {
             $cm = $this->modinfo->get_cm($this->cmid);
         } catch (moodle_exception $e) {

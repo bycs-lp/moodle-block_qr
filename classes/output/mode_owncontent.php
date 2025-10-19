@@ -25,8 +25,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Thomas Schönlein
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mode_owncontent implements \renderable, \templatable
-{
+class mode_owncontent implements \renderable, \templatable {
     /**
      * @var string $raw The raw content of the QR code
      */
@@ -36,8 +35,7 @@ class mode_owncontent implements \renderable, \templatable
      * mode_owncontent constructor.
      * @param string $raw
      */
-    public function __construct(string $raw)
-    {
+    public function __construct(string $raw) {
         $this->raw = trim($raw);
     }
 
@@ -46,8 +44,7 @@ class mode_owncontent implements \renderable, \templatable
      * @param \core_renderer $output renderer to create output
      * @return array
      */
-    public function export_for_template($output): array
-    {
+    public function export_for_template($output): array {
         $isurl = filter_var($this->raw, FILTER_VALIDATE_URL) !== false;
         return [
             'description' => '',

@@ -32,13 +32,11 @@ use block_qr\output\mode_wifi;
  * @author     Florian Dagner <florian.dagner@outlook.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_qr extends block_base
-{
+class block_qr extends block_base {
     /**
      * Sets the block title.
      */
-    public function init(): void
-    {
+    public function init(): void {
         $this->title = get_string('pluginname', 'block_qr');
     }
 
@@ -47,16 +45,14 @@ class block_qr extends block_base
      *
      * @return bool
      */
-    public function has_config(): bool
-    {
+    public function has_config(): bool {
         return true;
     }
 
     /**
      * Create default config.
      */
-    public function instance_create(): bool
-    {
+    public function instance_create(): bool {
         $this->config = new stdClass();
         $this->config->options = 'currenturl';
         $this->instance_config_save($this->config);
@@ -68,8 +64,7 @@ class block_qr extends block_base
      *
      * @return stdClass
      */
-    public function get_content()
-    {
+    public function get_content() {
         global $CFG, $USER, $OUTPUT;
         if ($this->content !== null) {
             return $this->content;
@@ -209,8 +204,7 @@ class block_qr extends block_base
      *
      * @return array
      */
-    public function applicable_formats()
-    {
+    public function applicable_formats() {
         return ['all' => true];
     }
 
@@ -219,8 +213,7 @@ class block_qr extends block_base
      *
      * @return boolean
      */
-    public function instance_allow_multiple()
-    {
+    public function instance_allow_multiple() {
         return true;
     }
 }

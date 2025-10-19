@@ -26,8 +26,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Thomas Schönlein
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class qr_test extends \advanced_testcase
-{
+final class qr_test extends \advanced_testcase {
     /** @var \stdClass $course */
     private $course;
     /** @var int $sectionid */
@@ -39,8 +38,7 @@ final class qr_test extends \advanced_testcase
      * Setup test environment
      * @return void
      */
-    protected function setUp(): void
-    {
+    protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest(true);
         date_default_timezone_set('UTC');
@@ -71,8 +69,7 @@ final class qr_test extends \advanced_testcase
      * @param array $expect Expected output
      */
     #[DataProvider('get_content_provider')]
-    public function test_get_content(string $mode, array $config, \moodle_url $pageurl, array $expect): void
-    {
+    public function test_get_content(string $mode, array $config, \moodle_url $pageurl, array $expect): void {
         global $PAGE;
 
         $PAGE->set_course($this->course);
@@ -115,8 +112,7 @@ final class qr_test extends \advanced_testcase
      * dataProvider for test_get_content
      * @return array Sets of data for test_get_content
      */
-    public static function get_content_provider(): array
-    {
+    public static function get_content_provider(): array {
         return [
             'currenturl' => [
                 'currenturl',
