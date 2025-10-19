@@ -14,17 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
-/**
- * Admin settings for block_qr
- *
- * @package    block_qr
- * @copyright  2023 ISB Bayern
- * @author     Florian Dagner <florian.dagner@outlook.de>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
 global $ADMIN, $settings;
