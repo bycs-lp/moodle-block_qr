@@ -16,8 +16,6 @@
 
 namespace block_qr\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class mode_wifi
  * @package     block_qr

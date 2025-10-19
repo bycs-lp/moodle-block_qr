@@ -16,8 +16,6 @@
 
 namespace block_qr\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class mode_event
  * @package     block_qr
@@ -96,17 +94,17 @@ class mode_event implements \renderable, \templatable {
                 break;
 
             case 1:
-                // All day event
+                // All day event.
                 $dateformat = get_string('strftimedate', 'langconfig');
                 $qrcodecontent .= "DTSTART:" . date('Ymd', $this->start) . "\n";
                 $qrcodecontent .= "DTEND:" . date('Ymd', $this->end) . "\n";
 
                 if (date('ymd', $this->end) != date('ymd', $this->start)) {
-                    // Different days
+                    // Different days.
                     $calendarstart = userdate($this->start, $dateformat) . " - ";
                     $calendarend = userdate($this->end, $dateformat);
                 } else {
-                    // Same day
+                    // Same day.
                     $calendarstart = userdate($this->start, $dateformat);
                     $calendarend = '';
                 }

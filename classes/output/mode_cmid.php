@@ -16,11 +16,8 @@
 
 namespace block_qr\output;
 
-use core\output\core_renderer;
 use moodle_url;
 use core\exception\moodle_exception;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class mode_cmid

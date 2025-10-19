@@ -18,8 +18,6 @@ namespace block_qr\output;
 
 use moodle_url;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class mode_section
  * @package     block_qr
