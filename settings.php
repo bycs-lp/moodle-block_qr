@@ -13,6 +13,9 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+defined('MOODLE_INTERNAL') || die();
+
 global $ADMIN, $settings;
 
 /**
@@ -24,10 +27,9 @@ global $ADMIN, $settings;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 if ($ADMIN->fulltree) {
-    $settings->add(new admin_setting_configtext(
+    $settings->add(
+        new admin_setting_configtext(
         'block_qr/configshortlink',
         new lang_string('shortlinkservice', 'block_qr'),
         new lang_string('shortlinkservice_description', 'block_qr'),

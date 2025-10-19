@@ -109,8 +109,15 @@ class block_qr extends block_base {
                 break;
 
             case 'internalcontent':
-                list($type, $id) = explode('=',
-                    $this->config->internal);
+                [$type, $id] = array_pad(
+                    explode('=',
+                    (string)$this->config->internal,
+                    2),
+                    2,
+                    null
+                );
+                $type = trim((string)$type);
+                $id   = $id !== null ? (int)$id : null;
                 switch ($type) {
                     case 'cmid':
                         $renderable = new mode_cmid(
