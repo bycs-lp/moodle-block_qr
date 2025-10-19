@@ -27,19 +27,19 @@ defined('MOODLE_INTERNAL') || die();
  */
 class mode_wifi implements \renderable, \templatable {
     /**
-     * @var string Authentication method
+     * @var string $auth Authentication method
      */
     private string $auth;
     /**
-     * @var string SSID
+     * @var string $ssid SSID
      */
     private string $ssid;
     /**
-     * @var string Passkey
+     * @var string $passkey Passkey
      */
     private string $passkey;
     /**
-     * @var string Hidden network
+     * @var string $hidden Hidden network
      */
     private string $hidden;
 

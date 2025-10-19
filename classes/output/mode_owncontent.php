@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 class mode_owncontent implements \renderable, \templatable
 {
     /**
-     * @var string The raw content of the QR code
+     * @var string $raw The raw content of the QR code
      */
     private string $raw;
 

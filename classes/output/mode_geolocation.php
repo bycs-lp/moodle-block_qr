@@ -28,15 +28,15 @@ defined('MOODLE_INTERNAL') || die();
 class mode_geolocation implements \renderable, \templatable
 {
     /**
-     * @var string Latitude
+     * @var string $lat Latitude
      */
     private string $lat;
     /**
-     * @var string Longitude
+     * @var string $lng Longitude
      */
     private string $lng;
     /**
-     * @var string|null Link type
+     * @var string|null $linktype Link type
      */
     private ?string $linktype;
 

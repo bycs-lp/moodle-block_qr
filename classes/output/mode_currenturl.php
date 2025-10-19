@@ -27,12 +27,12 @@ defined('MOODLE_INTERNAL') || die();
  */
 class mode_currenturl implements \renderable, \templatable
 {
-    /** @var \moodle_url */
+    /** @var \moodle_url $url The current URL*/
     private $url;
 
     /**
      *
-     * @param \moodle_url $url
+     * @param \moodle_url $url The current URL
      */
     public function __construct(\moodle_url $url)
     {

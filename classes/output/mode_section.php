@@ -30,15 +30,15 @@ defined('MOODLE_INTERNAL') || die();
 class mode_section implements \renderable, \templatable
 {
     /**
-     * @var \course_modinfo Mode type
+     * @var \course_modinfo $modinfo Mode type
      */
     private \course_modinfo $modinfo;
     /**
-     * @var int Section ID
+     * @var int $sectionid Section ID
      */
     private int $sectionid;
     /**
-     * @var bool User can edit
+     * @var bool $usercanedit User can edit
      */
     private bool $usercanedit;
 

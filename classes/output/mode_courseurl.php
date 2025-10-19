@@ -30,11 +30,11 @@ defined('MOODLE_INTERNAL') || die();
 class mode_courseurl implements \renderable, \templatable
 {
     /**
-     * @var int Course ID
+     * @var int $courseid Course ID
      */
     private int $courseid;
     /**
-     * @var string|null Description
+     * @var string|null $desc Description
      */
     private ?string $desc;
 

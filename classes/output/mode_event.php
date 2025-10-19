@@ -28,19 +28,19 @@ defined('MOODLE_INTERNAL') || die();
 class mode_event implements \renderable, \templatable
 {
     /**
-     * @var string Discription of the event
+     * @var string $summary Discription of the event
      */
     private string $summary;
     /**
-     * @var string Location of the event
+     * @var string $location Location of the event
      */
     private string $location;
     /**
-     * @var int Start time of the event
+     * @var int $start Start time of the event
      */
     private int $start;
     /**
-     * @var int End time of the event
+     * @var int $end End time of the event
      */
     private int $end;
     /**

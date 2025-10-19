@@ -32,8 +32,17 @@ defined('MOODLE_INTERNAL') || die();
  */
 class mode_cmid implements \renderable, \templatable
 {
+    /**
+     * @var \course_modinfo $modinfo Mode type
+     */
     private \course_modinfo $modinfo;
+    /**
+     * @var int $cmid Module ID
+     */
     private int $cmid;
+    /**
+     * @var bool $usercanedit User can edit
+     */
     private bool $usercanedit;
 
     /**
