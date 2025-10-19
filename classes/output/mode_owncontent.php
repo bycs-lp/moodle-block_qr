@@ -38,7 +38,7 @@ class mode_owncontent implements \renderable, \templatable {
 
     /**
      * Export for template
-     * @param $output
+     * @param \core_renderer $output renderer to create output
      * @return array
      */
     public function export_for_template($output): array {

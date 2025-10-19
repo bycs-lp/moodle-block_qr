@@ -16,6 +16,7 @@
 
 namespace block_qr\output;
 
+use core\output\core_renderer;
 use moodle_url;
 use core\exception\moodle_exception;
 
@@ -48,7 +49,8 @@ class mode_cmid implements \renderable, \templatable {
 
     /**
      * Export for template
-     * @param $output
+     *
+     * @param \core_renderer $output renderer for output
      * @return array
      * @throws \coding_exception
      * @throws \dml_exception

@@ -50,7 +50,7 @@ class mode_event implements \renderable, \templatable {
 
     /**
      * Export for template
-     * @param $output
+     * @param \core_renderer $output renderer to create output
      * @return array
      * @throws \coding_exception
      */
