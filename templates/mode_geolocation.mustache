@@ -1,0 +1,9 @@
+<p class="text-center">
+    {{description}}<br>
+    {{#geocoordinates}}
+        <i class="fa fa-map-marker"></i>
+        {{#qrurl}}<a href="{{{qrcodelink}}}">{{/qrurl}}
+        {{geocoordinates}}
+        {{#qrurl}}</a>{{/qrurl}}
+    {{/geocoordinates}}
+</p>
