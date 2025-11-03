@@ -80,13 +80,13 @@ final class qr_test extends \advanced_testcase {
     /**
      * Tests the QR-Block content output for the provided data set.
      *
-     * @dataProvider get_content_provider
      * @param string $mode QR-Block mode
      * @param array $config QR-Block data
      * @param \moodle_url $pageurl Input URL
      * @param array $expect Expected output
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('get_content_provider')]
     public function test_get_content(string $mode, array $config, \moodle_url $pageurl, array $expect): void {
         global $PAGE;
 
@@ -233,7 +233,6 @@ final class qr_test extends \advanced_testcase {
     /**
      * Exercises the internal content handling using the supplied scenario.
      *
-     * @dataProvider internalcontent_provider
      * @param string $mode Target type (cmid or section)
      * @param string $action Action performed (move, hide, delete)
      * @param bool $usercanedit Whether user can edit
@@ -242,6 +241,7 @@ final class qr_test extends \advanced_testcase {
      * @param string|null $expectdescription Expected description placeholder/value
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('internalcontent_provider')]
     public function test_get_content_internal(
         string $mode,
         string $action,
