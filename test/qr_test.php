@@ -63,8 +63,6 @@ final class qr_test extends \advanced_testcase {
         $secinfo = $modinfo->get_section_info_by_id($sectioninfo->id);
         $this->sectionid = $secinfo->id;
         $this->sectionnum = $secinfo->section;
-
-
         $page = $gen->create_module('page', [
             'course' => $this->course->id,
             'section' => 1,
@@ -80,14 +78,14 @@ final class qr_test extends \advanced_testcase {
     }
 
     /**
-     * Tests the QR-Block content
+     * Tests the QR-Block content output for the provided data set.
+     *
+     * @dataProvider get_content_provider
      * @param string $mode QR-Block mode
      * @param array $config QR-Block data
-     * @param moodle_url $pageurl Input URL
+     * @param \moodle_url $pageurl Input URL
      * @param array $expect Expected output
-     */
-    /**
-     * @dataProvider get_content_provider
+     * @return void
      */
     public function test_get_content(string $mode, array $config, \moodle_url $pageurl, array $expect): void {
         global $PAGE;
@@ -233,17 +231,16 @@ final class qr_test extends \advanced_testcase {
     }
 
     /**
-     * Tests the internal content behaviour for modules and sections.
+     * Exercises the internal content handling using the supplied scenario.
      *
-     * @param string $target Target type (cmid or section)
+     * @dataProvider internalcontent_provider
+     * @param string $mode Target type (cmid or section)
      * @param string $action Action performed (move, hide, delete)
      * @param bool $usercanedit Whether user can edit
      * @param bool $expectvisible Expectation if QR link should be shown
      * @param string|null $errorexpected Expected error string identifier
      * @param string|null $expectdescription Expected description placeholder/value
-     */
-    /**
-     * @dataProvider internalcontent_provider
+     * @return void
      */
     public function test_get_content_internal(
         string $mode,
@@ -403,8 +400,9 @@ final class qr_test extends \advanced_testcase {
     /**
      * Creates a QR block instance with the provided config.
      *
-     * @param array $config
-     * @return block_qr
+     * @param array $config Configuration data to apply
+     * @param \context|null $context Optional context for the block
+     * @return \block_qr
      */
     private function create_block_with_config(array $config, ?\context $context = null): \block_qr {
         global $PAGE;
@@ -428,5 +426,4 @@ final class qr_test extends \advanced_testcase {
         $block->context = $context;
         return $block;
     }
-
 }
