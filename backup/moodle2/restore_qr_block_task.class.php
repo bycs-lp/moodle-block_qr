@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_qr_block_task extends restore_block_task {
-
     /**
      * Does nothing.
      *
@@ -104,7 +103,13 @@ class restore_qr_block_task extends restore_block_task {
             $config->owncontent = $decoder->decode_content($config->owncontent);
 
             if (isset($config->internal)) {
-                list($type, $id) = explode('=', $config->internal);
+                [$type, $id] = array_pad(
+                    explode('=', (string) $this->config->internal, 2),
+                    2,
+                    null
+                );
+                $type = trim((string) $type);
+                $id   = $id !== null ? (int) $id : null;
                 if ($type == 'cmid') {
                     $moduleid = restore_dbops::get_backup_ids_record($this->get_restoreid(), 'course_module', $id);
                     if ($moduleid) {

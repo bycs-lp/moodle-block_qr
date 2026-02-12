@@ -36,15 +36,19 @@ class block_qr_edit_form extends block_edit_form {
         if (!is_null($this->page->course)) {
             $this->iscourse = true;
             $courseid = $this->page->course->id;
+            $course = get_course($courseid);
+            $courseformat = course_get_format($course);
         }
 
         $cm = get_fast_modinfo($courseid);
 
         $courselist = [];
-        foreach ($cm->sections as $sectionnum => $section) {
-            $sectioninfo = $cm->get_section_info($sectionnum);
-            $cmid = 'section=' . $sectionnum;
-            $name = $sectioninfo->name;
+        $modinfo = get_fast_modinfo($courseid);
+        $allsections = $modinfo->get_section_info_all();
+        foreach ($allsections as $sectionnum => $sectioninfo) {
+            // Store section id so links survive reodering/deletions.
+            $sectionid = 'section=' . $sectioninfo->id;
+            $name = $courseformat->get_section_name($sectioninfo);
             if (empty($name)) {
                 if ($sectionnum == 0) {
                     $name = get_string('general');
@@ -53,12 +57,15 @@ class block_qr_edit_form extends block_edit_form {
                 }
             }
 
-            $courselist[$cmid] = '--- ' . $name . ' ---';
-            foreach ($section as $cmid) {
-                $module = $cm->get_cm($cmid);
-                // Get only course modules which are not deleted.
-                if ($module->deletioninprogress == 0) {
-                    $courselist['cmid=' . $cmid] = $module->name;
+            $courselist[$sectionid] = '--- ' . $name . ' ---';
+            // Get all activities in this section.
+            if (!empty($modinfo->sections[$sectionnum])) {
+                foreach ($modinfo->sections[$sectionnum] as $cmid) {
+                    $module = $modinfo->cms[$cmid];
+                    // Get only course modules which are not deleted.
+                    if ($module->deletioninprogress == 0) {
+                        $courselist['cmid=' . $cmid] = $module->name;
+                    }
                 }
             }
         }
@@ -246,5 +253,4 @@ class block_qr_edit_form extends block_edit_form {
         }
         return $errors;
     }
-
 }
