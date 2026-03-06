@@ -48,7 +48,9 @@ export const init = (id, content, description) => {
     const btn = document.getElementById('qrcodeModalButton' + id);
     if (btn) {
         btn.addEventListener('click', () => {
-            Modal.create({title: description, body: svg}).then(m => m.show());
+            Modal.create({title: description, body: svg})
+                .then(m => m.show())
+                .catch(window.console.error);
         });
     }
 };

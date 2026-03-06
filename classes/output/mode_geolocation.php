@@ -31,10 +31,14 @@ class mode_geolocation implements \renderable, \templatable {
      * @param string|null $linktype Link type
      */
     public function __construct(
+        /** @var string $lat Latitude */
         private readonly string $lat,
+        /** @var string $lng Longitude */
         private readonly string $lng,
+        /** @var string|null $linktype Link type */
         private readonly ?string $linktype,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function export_for_template($output): array {

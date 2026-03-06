@@ -33,12 +33,18 @@ class mode_event implements \renderable, \templatable {
      * @param int $allday All day event
      */
     public function __construct(
+        /** @var string $summary Description of the event */
         private readonly string $summary,
+        /** @var string $location Location of the event */
         private readonly string $location,
+        /** @var int $start Start time of the event */
         private readonly int $start,
+        /** @var int $end End time of the event */
         private readonly int $end,
+        /** @var int $allday All day event */
         private readonly int $allday,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function export_for_template($output): array {

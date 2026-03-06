@@ -35,10 +35,14 @@ class mode_cmid implements \renderable, \templatable {
      * @param bool $usercanedit User can edit
      */
     public function __construct(
+        /** @var \course_modinfo $modinfo */
         private readonly \course_modinfo $modinfo,
+        /** @var int $cmid Module ID */
         private readonly int $cmid,
+        /** @var bool $usercanedit User can edit */
         private readonly bool $usercanedit,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function export_for_template($output): array {

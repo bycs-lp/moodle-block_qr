@@ -65,7 +65,7 @@ class block_qr extends block_base {
      * @return stdClass
      */
     public function get_content() {
-        global $PAGE, $USER, $OUTPUT;
+        global $USER, $OUTPUT;
         if ($this->content !== null) {
             return $this->content;
         }
@@ -197,8 +197,8 @@ class block_qr extends block_base {
         $data['subcontent'] = $content;
 
         $this->content->text = $OUTPUT->render_from_template('block_qr/qr', $data);
-        $PAGE->requires->js('/blocks/qr/js/qrcode.min.js');
-        $PAGE->requires->js_call_amd('block_qr/qr_renderer', 'init', [
+        $this->page->requires->js('/blocks/qr/js/qrcode.min.js');
+        $this->page->requires->js_call_amd('block_qr/qr_renderer', 'init', [
             (string) $data['id'],
             $data['qrcodecontent'] ?? '',
             $data['description'] ?? '',

@@ -29,8 +29,10 @@ class mode_currenturl implements \renderable, \templatable {
      * @param \moodle_url $url The current URL
      */
     public function __construct(
+        /** @var \moodle_url $url The current URL */
         private readonly \moodle_url $url,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function export_for_template($output): array {

@@ -32,11 +32,16 @@ class mode_wifi implements \renderable, \templatable {
      * @param string $hidden Hidden network
      */
     public function __construct(
+        /** @var string $auth Authentication method */
         private readonly string $auth,
+        /** @var string $ssid SSID */
         private readonly string $ssid,
+        /** @var string $passkey Passkey */
         private readonly string $passkey,
+        /** @var string $hidden Hidden network */
         private readonly string $hidden,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function export_for_template($output): array {

@@ -32,9 +32,12 @@ class mode_courseurl implements \renderable, \templatable {
      * @param string|null $desc Description
      */
     public function __construct(
+        /** @var int $courseid Course ID */
         private readonly int $courseid,
+        /** @var string|null $desc Description */
         private readonly ?string $desc,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function export_for_template($output): array {

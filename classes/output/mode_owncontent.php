@@ -28,7 +28,10 @@ class mode_owncontent implements \renderable, \templatable {
      * Constructor.
      * @param string $raw The raw content of the QR code
      */
-    public function __construct(private string $raw) {
+    public function __construct(
+        /** @var string $raw The raw content of the QR code */
+        private string $raw,
+    ) {
         $this->raw = trim($raw);
     }
 

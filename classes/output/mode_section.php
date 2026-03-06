@@ -33,10 +33,14 @@ class mode_section implements \renderable, \templatable {
      * @param bool $usercanedit User can edit
      */
     public function __construct(
+        /** @var \course_modinfo $modinfo */
         private readonly \course_modinfo $modinfo,
+        /** @var int $sectionid Section ID */
         private readonly int $sectionid,
+        /** @var bool $usercanedit User can edit */
         private readonly bool $usercanedit,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function export_for_template($output): array {
