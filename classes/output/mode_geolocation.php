@@ -25,36 +25,18 @@ namespace block_qr\output;
  */
 class mode_geolocation implements \renderable, \templatable {
     /**
-     * @var string $lat Latitude
+     * Constructor.
+     * @param string $lat Latitude
+     * @param string $lng Longitude
+     * @param string|null $linktype Link type
      */
-    private string $lat;
-    /**
-     * @var string $lng Longitude
-     */
-    private string $lng;
-    /**
-     * @var string|null $linktype Link type
-     */
-    private ?string $linktype;
+    public function __construct(
+        private readonly string $lat,
+        private readonly string $lng,
+        private readonly ?string $linktype,
+    ) {}
 
-    /**
-     * mode_geolocation constructor.
-     * @param string $lat
-     * @param string $lng
-     * @param string|null $linktype
-     */
-    public function __construct(string $lat, string $lng, ?string $linktype) {
-        $this->lat = $lat;
-        $this->lng = $lng;
-        $this->linktype = $linktype;
-    }
-
-    /**
-     * Export for template
-     * @param \core_renderer $output renderer to create output
-     * @return array
-     * @throws \coding_exception
-     */
+    #[\Override]
     public function export_for_template($output): array {
         $geo = "geo:{$this->lat},{$this->lng}";
         $link = null;

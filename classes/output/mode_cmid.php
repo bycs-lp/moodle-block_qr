@@ -29,73 +29,37 @@ use core\exception\moodle_exception;
  */
 class mode_cmid implements \renderable, \templatable {
     /**
-     * @var \course_modinfo $modinfo Mode type
-     */
-    private \course_modinfo $modinfo;
-    /**
-     * @var int $cmid Module ID
-     */
-    private int $cmid;
-    /**
-     * @var bool $usercanedit User can edit
-     */
-    private bool $usercanedit;
-
-    /**
-     * mode_cmid constructor.
+     * Constructor.
      * @param \course_modinfo $modinfo
-     * @param int $cmid
-     * @param bool $usercanedit
+     * @param int $cmid Module ID
+     * @param bool $usercanedit User can edit
      */
-    public function __construct(\course_modinfo $modinfo, int $cmid, bool $usercanedit) {
-        $this->modinfo = $modinfo;
-        $this->cmid = $cmid;
-        $this->usercanedit = $usercanedit;
-    }
+    public function __construct(
+        private readonly \course_modinfo $modinfo,
+        private readonly int $cmid,
+        private readonly bool $usercanedit,
+    ) {}
 
-    /**
-     * Export for template
-     *
-     * @param \core_renderer $output renderer for output
-     * @return array
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws moodle_exception
-     */
+    #[\Override]
     public function export_for_template($output): array {
+        $errorreturn = [
+            'qrurl' => false,
+            'qrcodecontent' => '',
+            'description' => get_string('errormodulenotavailable', 'block_qr'),
+        ];
+
         try {
             $cm = $this->modinfo->get_cm($this->cmid);
         } catch (moodle_exception $e) {
-            return [
-                'qrurl' => false,
-                'qrcodecontent' => '',
-                'description' => get_string('errormodulenotavailable', 'block_qr'),
-            ];
-        }
-
-        global $DB;
-        if (!$DB->record_exists('course_modules', ['id' => $this->cmid])) {
-            return [
-                'qrurl' => false,
-                'qrcodecontent' => '',
-                'description' => get_string('errormodulenotavailable', 'block_qr'),
-            ];
+            return $errorreturn;
         }
 
         if ($cm->deletioninprogress) {
-            return [
-                'qrurl' => false,
-                'qrcodecontent' => '',
-                'description' => get_string('errormodulenotavailable', 'block_qr'),
-            ];
+            return $errorreturn;
         }
 
         if (!$cm->uservisible && !$this->usercanedit) {
-            return [
-                'qrurl' => false,
-                'qrcodecontent' => '',
-                'description' => get_string('errormodulenotavailable', 'block_qr'),
-            ];
+            return $errorreturn;
         }
 
         if ($cm->url) {

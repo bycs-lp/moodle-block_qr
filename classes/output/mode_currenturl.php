@@ -24,23 +24,15 @@ namespace block_qr\output;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_currenturl implements \renderable, \templatable {
-    /** @var \moodle_url $url The current URL*/
-    private $url;
-
     /**
-     *
+     * Constructor.
      * @param \moodle_url $url The current URL
      */
-    public function __construct(\moodle_url $url) {
-        $this->url = $url;
-    }
+    public function __construct(
+        private readonly \moodle_url $url,
+    ) {}
 
-    /**
-     * Export for template
-     * @param \core_renderer $output renderer to create output
-     * @return array
-     * @throws \coding_exception
-     */
+    #[\Override]
     public function export_for_template($output): array {
         $href = $this->url->out(false);
         return [

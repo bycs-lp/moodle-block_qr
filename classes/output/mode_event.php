@@ -25,48 +25,22 @@ namespace block_qr\output;
  */
 class mode_event implements \renderable, \templatable {
     /**
-     * @var string $summary Discription of the event
+     * Constructor.
+     * @param string $summary Description of the event
+     * @param string $location Location of the event
+     * @param int $start Start time of the event
+     * @param int $end End time of the event
+     * @param int $allday All day event
      */
-    private string $summary;
-    /**
-     * @var string $location Location of the event
-     */
-    private string $location;
-    /**
-     * @var int $start Start time of the event
-     */
-    private int $start;
-    /**
-     * @var int $end End time of the event
-     */
-    private int $end;
-    /**
-     * @var int All day event
-     */
-    private int $allday;
+    public function __construct(
+        private readonly string $summary,
+        private readonly string $location,
+        private readonly int $start,
+        private readonly int $end,
+        private readonly int $allday,
+    ) {}
 
-    /**
-     * mode_event constructor.
-     * @param string $summary
-     * @param string $location
-     * @param int $start
-     * @param int $end
-     * @param int $allday
-     */
-    public function __construct(string $summary, string $location, int $start, int $end, int $allday) {
-        $this->summary = $summary;
-        $this->location = $location;
-        $this->start = $start;
-        $this->end = $end;
-        $this->allday = $allday;
-    }
-
-    /**
-     * Export for template
-     * @param \core_renderer $output renderer to create output
-     * @return array
-     * @throws \coding_exception
-     */
+    #[\Override]
     public function export_for_template($output): array {
         $qrcodecontent = "BEGIN:VCALENDAR\n";
         $qrcodecontent .= "VERSION:2.0\n";

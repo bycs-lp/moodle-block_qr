@@ -65,7 +65,7 @@ class block_qr extends block_base {
      * @return stdClass
      */
     public function get_content() {
-        global $CFG, $USER, $OUTPUT;
+        global $PAGE, $USER, $OUTPUT;
         if ($this->content !== null) {
             return $this->content;
         }
@@ -192,16 +192,17 @@ class block_qr extends block_base {
             }
         }
 
-        if (array_key_exists('qrcodecontent', $data) && $data['qrcodecontent'] !== null) {
-            $data['qrcodecontent_json'] = json_encode($data['qrcodecontent'], JSON_UNESCAPED_SLASHES);
-        }
-
         $data['size'] = $this->config->size ?? null;
         $data['id'] = $this->context->id;
-        $data['javascript'] = $CFG->wwwroot . '/blocks/qr/js/qrcode.min.js';
         $data['subcontent'] = $content;
 
         $this->content->text = $OUTPUT->render_from_template('block_qr/qr', $data);
+        $PAGE->requires->js('/blocks/qr/js/qrcode.min.js');
+        $PAGE->requires->js_call_amd('block_qr/qr_renderer', 'init', [
+            (string) $data['id'],
+            $data['qrcodecontent'] ?? '',
+            $data['description'] ?? '',
+        ]);
         return $this->content;
     }
 

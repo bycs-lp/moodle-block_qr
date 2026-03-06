@@ -27,30 +27,16 @@ use moodle_url;
  */
 class mode_courseurl implements \renderable, \templatable {
     /**
-     * @var int $courseid Course ID
+     * Constructor.
+     * @param int $courseid Course ID
+     * @param string|null $desc Description
      */
-    private int $courseid;
-    /**
-     * @var string|null $desc Description
-     */
-    private ?string $desc;
+    public function __construct(
+        private readonly int $courseid,
+        private readonly ?string $desc,
+    ) {}
 
-    /**
-     * Constructor
-     * @param int $courseid
-     * @param string|null $desc
-     */
-    public function __construct(int $courseid, ?string $desc) {
-        $this->courseid = $courseid;
-        $this->desc = $desc;
-    }
-
-    /**
-     * Export for template
-     * @param \core_renderer $output renderer to create output
-     * @return array
-     * @throws \core\exception\moodle_exception
-     */
+    #[\Override]
     public function export_for_template($output): array {
         $url = new moodle_url('/course/view.php', ['id' => $this->courseid]);
         return [

@@ -25,42 +25,20 @@ namespace block_qr\output;
  */
 class mode_wifi implements \renderable, \templatable {
     /**
-     * @var string $auth Authentication method
+     * Constructor.
+     * @param string $auth Authentication method
+     * @param string $ssid SSID
+     * @param string $passkey Passkey
+     * @param string $hidden Hidden network
      */
-    private string $auth;
-    /**
-     * @var string $ssid SSID
-     */
-    private string $ssid;
-    /**
-     * @var string $passkey Passkey
-     */
-    private string $passkey;
-    /**
-     * @var string $hidden Hidden network
-     */
-    private string $hidden;
+    public function __construct(
+        private readonly string $auth,
+        private readonly string $ssid,
+        private readonly string $passkey,
+        private readonly string $hidden,
+    ) {}
 
-    /**
-     * mode_wifi constructor.
-     * @param string $auth
-     * @param string $ssid
-     * @param string $passkey
-     * @param string $hidden
-     */
-    public function __construct(string $auth, string $ssid, string $passkey, string $hidden) {
-        $this->auth = $auth;
-        $this->ssid = $ssid;
-        $this->passkey = $passkey;
-        $this->hidden = $hidden;
-    }
-
-    /**
-     * Export for template
-     * @param \core_renderer $output renderer to create output
-     * @return array
-     * @throws \coding_exception
-     */
+    #[\Override]
     public function export_for_template($output): array {
         $content = "WIFI:T:{$this->auth};S:{$this->ssid};P:{$this->passkey};H:{$this->hidden};";
         return [

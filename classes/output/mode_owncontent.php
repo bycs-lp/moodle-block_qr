@@ -25,23 +25,14 @@ namespace block_qr\output;
  */
 class mode_owncontent implements \renderable, \templatable {
     /**
-     * @var string $raw The raw content of the QR code
+     * Constructor.
+     * @param string $raw The raw content of the QR code
      */
-    private string $raw;
-
-    /**
-     * mode_owncontent constructor.
-     * @param string $raw
-     */
-    public function __construct(string $raw) {
+    public function __construct(private string $raw) {
         $this->raw = trim($raw);
     }
 
-    /**
-     * Export for template
-     * @param \core_renderer $output renderer to create output
-     * @return array
-     */
+    #[\Override]
     public function export_for_template($output): array {
         $isurl = filter_var($this->raw, FILTER_VALIDATE_URL) !== false;
         return [

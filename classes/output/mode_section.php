@@ -27,37 +27,18 @@ use moodle_url;
  */
 class mode_section implements \renderable, \templatable {
     /**
-     * @var \course_modinfo $modinfo Mode type
-     */
-    private \course_modinfo $modinfo;
-    /**
-     * @var int $sectionid Section ID
-     */
-    private int $sectionid;
-    /**
-     * @var bool $usercanedit User can edit
-     */
-    private bool $usercanedit;
-
-    /**
-     * mode_section constructor.
+     * Constructor.
      * @param \course_modinfo $modinfo
-     * @param int $sectionid
-     * @param bool $usercanedit
+     * @param int $sectionid Section ID
+     * @param bool $usercanedit User can edit
      */
-    public function __construct(\course_modinfo $modinfo, int $sectionid, bool $usercanedit) {
-        $this->modinfo = $modinfo;
-        $this->sectionid = $sectionid;
-        $this->usercanedit = $usercanedit;
-    }
+    public function __construct(
+        private readonly \course_modinfo $modinfo,
+        private readonly int $sectionid,
+        private readonly bool $usercanedit,
+    ) {}
 
-    /**
-     * Export for template
-     * @param \core_renderer $output renderer to create output
-     * @return array
-     * @throws \coding_exception
-     * @throws \core\exception\moodle_exception
-     */
+    #[\Override]
     public function export_for_template($output): array {
         $sectioninfo = null;
         try {
