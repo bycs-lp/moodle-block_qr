@@ -24,7 +24,12 @@ namespace block_qr\output;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_wifi implements \renderable, \templatable {
-
+    /**
+     * @param string $auth Authentication method
+     * @param string $ssid SSID
+     * @param string $passkey Passkey
+     * @param string $hidden Hidden network
+     */
     public function __construct(
         /** @var string $auth Authentication method */
         private readonly string $auth,

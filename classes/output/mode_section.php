@@ -27,7 +27,11 @@ use moodle_url;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_section implements \renderable, \templatable {
-
+    /**
+     * @param modinfo $modinfo
+     * @param int $sectionid Section ID
+     * @param bool $usercanedit User can edit
+     */
     public function __construct(
         /** @var modinfo $modinfo */
         private readonly modinfo $modinfo,

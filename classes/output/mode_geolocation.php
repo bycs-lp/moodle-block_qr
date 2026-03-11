@@ -24,7 +24,11 @@ namespace block_qr\output;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_geolocation implements \renderable, \templatable {
-
+    /**
+     * @param string $lat Latitude
+     * @param string $lng Longitude
+     * @param ?string $linktype Link type
+     */
     public function __construct(
         /** @var string $lat Latitude */
         private readonly string $lat,

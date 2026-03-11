@@ -24,7 +24,9 @@ namespace block_qr\output;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_owncontent implements \renderable, \templatable {
-
+    /**
+     * @param string $raw The raw content of the QR code
+     */
     public function __construct(
         /** @var string $raw The raw content of the QR code */
         private string $raw,

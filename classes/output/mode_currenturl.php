@@ -24,7 +24,9 @@ namespace block_qr\output;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_currenturl implements \renderable, \templatable {
-
+    /**
+     * @param \moodle_url $url The current URL
+     */
     public function __construct(
         /** @var \moodle_url $url The current URL */
         private readonly \moodle_url $url,

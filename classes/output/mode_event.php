@@ -24,7 +24,13 @@ namespace block_qr\output;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_event implements \renderable, \templatable {
-
+    /**
+     * @param string $summary Description of the event
+     * @param string $location Location of the event
+     * @param int $start Start time of the event
+     * @param int $end End time of the event
+     * @param int $allday All day event
+     */
     public function __construct(
         /** @var string $summary Description of the event */
         private readonly string $summary,
