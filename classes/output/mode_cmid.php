@@ -30,6 +30,7 @@ use core\exception\moodle_exception;
  */
 class mode_cmid implements \renderable, \templatable {
     /**
+     * Constructor.
      * @param modinfo $modinfo
      * @param int $cmid Module ID
      * @param bool $usercanedit User can edit

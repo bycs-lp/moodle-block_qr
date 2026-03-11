@@ -25,6 +25,7 @@ namespace block_qr\output;
  */
 class mode_event implements \renderable, \templatable {
     /**
+     * Constructor.
      * @param string $summary Description of the event
      * @param string $location Location of the event
      * @param int $start Start time of the event

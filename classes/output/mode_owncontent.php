@@ -25,6 +25,7 @@ namespace block_qr\output;
  */
 class mode_owncontent implements \renderable, \templatable {
     /**
+     * Constructor.
      * @param string $raw The raw content of the QR code
      */
     public function __construct(

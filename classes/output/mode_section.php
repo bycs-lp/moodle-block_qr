@@ -28,6 +28,7 @@ use moodle_url;
  */
 class mode_section implements \renderable, \templatable {
     /**
+     * Constructor.
      * @param modinfo $modinfo
      * @param int $sectionid Section ID
      * @param bool $usercanedit User can edit

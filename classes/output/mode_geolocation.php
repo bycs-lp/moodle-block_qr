@@ -25,6 +25,7 @@ namespace block_qr\output;
  */
 class mode_geolocation implements \renderable, \templatable {
     /**
+     * Constructor.
      * @param string $lat Latitude
      * @param string $lng Longitude
      * @param ?string $linktype Link type

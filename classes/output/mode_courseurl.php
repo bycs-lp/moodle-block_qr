@@ -27,6 +27,7 @@ use moodle_url;
  */
 class mode_courseurl implements \renderable, \templatable {
     /**
+     * Constructor.
      * @param int $courseid Course ID
      * @param ?string $desc Description
      */

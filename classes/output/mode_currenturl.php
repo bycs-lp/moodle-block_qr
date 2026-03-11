@@ -25,6 +25,7 @@ namespace block_qr\output;
  */
 class mode_currenturl implements \renderable, \templatable {
     /**
+     * Constructor.
      * @param \moodle_url $url The current URL
      */
     public function __construct(
