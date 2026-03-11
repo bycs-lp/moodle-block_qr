@@ -16,6 +16,7 @@
 
 namespace block_qr\output;
 
+use core_course\modinfo;
 use moodle_url;
 
 /**
@@ -28,13 +29,10 @@ use moodle_url;
 class mode_section implements \renderable, \templatable {
     /**
      * Constructor.
-     * @param \course_modinfo $modinfo
-     * @param int $sectionid Section ID
-     * @param bool $usercanedit User can edit
      */
     public function __construct(
-        /** @var \course_modinfo $modinfo */
-        private readonly \course_modinfo $modinfo,
+        /** @var modinfo $modinfo */
+        private readonly modinfo $modinfo,
         /** @var int $sectionid Section ID */
         private readonly int $sectionid,
         /** @var bool $usercanedit User can edit */

@@ -28,13 +28,11 @@ use moodle_url;
 class mode_courseurl implements \renderable, \templatable {
     /**
      * Constructor.
-     * @param int $courseid Course ID
-     * @param string|null $desc Description
      */
     public function __construct(
         /** @var int $courseid Course ID */
         private readonly int $courseid,
-        /** @var string|null $desc Description */
+        /** @var ?string $desc Description */
         private readonly ?string $desc,
     ) {
     }

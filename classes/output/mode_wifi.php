@@ -26,10 +26,6 @@ namespace block_qr\output;
 class mode_wifi implements \renderable, \templatable {
     /**
      * Constructor.
-     * @param string $auth Authentication method
-     * @param string $ssid SSID
-     * @param string $passkey Passkey
-     * @param string $hidden Hidden network
      */
     public function __construct(
         /** @var string $auth Authentication method */

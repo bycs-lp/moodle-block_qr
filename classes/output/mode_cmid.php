@@ -16,6 +16,7 @@
 
 namespace block_qr\output;
 
+use core_course\modinfo;
 use moodle_url;
 use core\exception\moodle_exception;
 
@@ -30,13 +31,10 @@ use core\exception\moodle_exception;
 class mode_cmid implements \renderable, \templatable {
     /**
      * Constructor.
-     * @param \course_modinfo $modinfo
-     * @param int $cmid Module ID
-     * @param bool $usercanedit User can edit
      */
     public function __construct(
-        /** @var \course_modinfo $modinfo */
-        private readonly \course_modinfo $modinfo,
+        /** @var modinfo $modinfo */
+        private readonly modinfo $modinfo,
         /** @var int $cmid Module ID */
         private readonly int $cmid,
         /** @var bool $usercanedit User can edit */
