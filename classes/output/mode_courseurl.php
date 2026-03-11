@@ -26,9 +26,7 @@ use moodle_url;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_courseurl implements \renderable, \templatable {
-    /**
-     * Constructor.
-     */
+
     public function __construct(
         /** @var int $courseid Course ID */
         private readonly int $courseid,

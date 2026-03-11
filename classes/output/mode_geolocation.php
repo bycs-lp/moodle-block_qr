@@ -24,9 +24,7 @@ namespace block_qr\output;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_geolocation implements \renderable, \templatable {
-    /**
-     * Constructor.
-     */
+
     public function __construct(
         /** @var string $lat Latitude */
         private readonly string $lat,

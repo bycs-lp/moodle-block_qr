@@ -24,9 +24,7 @@ namespace block_qr\output;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_event implements \renderable, \templatable {
-    /**
-     * Constructor.
-     */
+
     public function __construct(
         /** @var string $summary Description of the event */
         private readonly string $summary,
