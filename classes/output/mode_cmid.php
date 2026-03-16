@@ -29,12 +29,6 @@ use core\exception\moodle_exception;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mode_cmid implements \renderable, \templatable {
-    /**
-     * Constructor.
-     * @param modinfo $modinfo
-     * @param int $cmid Module ID
-     * @param bool $usercanedit User can edit
-     */
     public function __construct(
         /** @var modinfo $modinfo */
         private readonly modinfo $modinfo,

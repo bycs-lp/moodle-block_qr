@@ -35,6 +35,8 @@ final class qr_test extends \advanced_testcase {
     private $cmid;
     /** @var \stdClass $student */
     private $student;
+    /** @var \stdClass $teacher */
+    private $teacher;
 
     /**
      * Setup test environment
@@ -72,6 +74,9 @@ final class qr_test extends \advanced_testcase {
         $secondsection = course_create_section($this->course, 0);
         $this->secondsectionid = $secondsection->id;
 
+        $this->teacher = $gen->create_user();
+        $gen->enrol_user($this->teacher->id, $this->course->id, 'editingteacher');
+
         $this->student = $gen->create_user();
         $gen->enrol_user($this->student->id, $this->course->id, 'student');
     }
@@ -79,9 +84,9 @@ final class qr_test extends \advanced_testcase {
     /**
      * Tests the QR-Block content output for the provided data set.
      *
-     * @param string $mode QR-Block mode
-     * @param array $config QR-Block data
-     * @param \moodle_url $pageurl Input URL
+     * @param string $mode QR block mode
+     * @param array $config QR block data
+     * @param \moodle_url $pageurl Page URL
      * @param array $expect Expected output
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('get_content_provider')]
@@ -259,7 +264,7 @@ final class qr_test extends \advanced_testcase {
         $PAGE->set_url(new \moodle_url('/course/view.php', ['id' => $this->course->id]));
         $PAGE->set_context($coursecontext);
 
-        $this->setAdminUser();
+        $this->setUser($this->teacher);
         $USER->editing = 1;
 
         if ($mode === 'cmid') {
@@ -287,8 +292,7 @@ final class qr_test extends \advanced_testcase {
         rebuild_course_cache($this->course->id, true);
 
         if ($usercanedit) {
-            // Admin is used because it has the editing capabilities required to see hidden/deleted content.
-            $this->setAdminUser();
+            $this->setUser($this->teacher);
             $USER->editing = 1;
         } else {
             $this->setUser($this->student);
@@ -382,83 +386,147 @@ final class qr_test extends \advanced_testcase {
         return [
             'cmid_visible_when_untouched_with_editing' => [
                 // Module exists and is visible; editor sees the QR link with module name.
-                'mode' => 'cmid', 'action' => 'none', 'usercanedit' => true,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__MODULENAME__',
+                'mode' => 'cmid',
+                'action' => 'none',
+                'usercanedit' => true,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__MODULENAME__',
             ],
             'cmid_visible_when_untouched_without_editing' => [
                 // Module exists and is visible; viewer also sees the QR link.
-                'mode' => 'cmid', 'action' => 'none', 'usercanedit' => false,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__MODULENAME__',
+                'mode' => 'cmid',
+                'action' => 'none',
+                'usercanedit' => false,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__MODULENAME__',
             ],
             'cmid_visible_after_move_with_editing' => [
                 // Module moved to another section; editor still sees the QR link.
-                'mode' => 'cmid', 'action' => 'move', 'usercanedit' => true,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__MODULENAME__',
+                'mode' => 'cmid',
+                'action' => 'move',
+                'usercanedit' => true,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__MODULENAME__',
             ],
             'cmid_visible_after_move_without_editing' => [
                 // Module moved to another section; viewer still sees the QR link.
-                'mode' => 'cmid', 'action' => 'move', 'usercanedit' => false,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__MODULENAME__',
+                'mode' => 'cmid',
+                'action' => 'move',
+                'usercanedit' => false,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__MODULENAME__',
             ],
             'cmid_visible_when_hidden_with_editing' => [
                 // Module is hidden; editor can still see hidden modules, so QR link is shown.
-                'mode' => 'cmid', 'action' => 'hide', 'usercanedit' => true,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__MODULENAME__',
+                'mode' => 'cmid',
+                'action' => 'hide',
+                'usercanedit' => true,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__MODULENAME__',
             ],
             'cmid_error_when_hidden_without_editing' => [
                 // Module is hidden; viewer cannot see hidden modules, so error message is shown.
-                'mode' => 'cmid', 'action' => 'hide', 'usercanedit' => false,
-                'expectvisible' => false, 'errorexpected' => 'errormodulenotavailable', 'expectdescription' => null,
+                'mode' => 'cmid',
+                'action' => 'hide',
+                'usercanedit' => false,
+                'expectvisible' => false,
+                'errorexpected' => 'errormodulenotavailable',
+                'expectdescription' => null,
             ],
             'cmid_error_when_deleted_with_editing' => [
                 // Module is deleted; even editors see the error message.
-                'mode' => 'cmid', 'action' => 'delete', 'usercanedit' => true,
-                'expectvisible' => false, 'errorexpected' => 'errormodulenotavailable', 'expectdescription' => null,
+                'mode' => 'cmid',
+                'action' => 'delete',
+                'usercanedit' => true,
+                'expectvisible' => false,
+                'errorexpected' => 'errormodulenotavailable',
+                'expectdescription' => null,
             ],
             'cmid_error_when_deleted_without_editing' => [
                 // Module is deleted; viewers see the error message.
-                'mode' => 'cmid', 'action' => 'delete', 'usercanedit' => false,
-                'expectvisible' => false, 'errorexpected' => 'errormodulenotavailable', 'expectdescription' => null,
+                'mode' => 'cmid',
+                'action' => 'delete',
+                'usercanedit' => false,
+                'expectvisible' => false,
+                'errorexpected' => 'errormodulenotavailable',
+                'expectdescription' => null,
             ],
             'section_visible_when_untouched_with_editing' => [
                 // Section exists and is visible; editor sees the QR link with section name.
-                'mode' => 'section', 'action' => 'none', 'usercanedit' => true,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__SECTIONNAME__',
+                'mode' => 'section',
+                'action' => 'none',
+                'usercanedit' => true,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__SECTIONNAME__',
             ],
             'section_visible_when_untouched_without_editing' => [
                 // Section exists and is visible; viewer also sees the QR link.
-                'mode' => 'section', 'action' => 'none', 'usercanedit' => false,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__SECTIONNAME__',
+                'mode' => 'section',
+                'action' => 'none',
+                'usercanedit' => false,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__SECTIONNAME__',
             ],
             'section_visible_after_move_with_editing' => [
                 // Section moved to a different position; editor still sees the QR link.
-                'mode' => 'section', 'action' => 'move', 'usercanedit' => true,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__SECTIONNAME__',
+                'mode' => 'section',
+                'action' => 'move',
+                'usercanedit' => true,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__SECTIONNAME__',
             ],
             'section_visible_after_move_without_editing' => [
                 // Section moved to a different position; viewer still sees the QR link.
-                'mode' => 'section', 'action' => 'move', 'usercanedit' => false,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__SECTIONNAME__',
+                'mode' => 'section',
+                'action' => 'move',
+                'usercanedit' => false,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__SECTIONNAME__',
             ],
             'section_visible_when_hidden_with_editing' => [
                 // Section is hidden; editor can still see hidden sections, so QR link is shown.
-                'mode' => 'section', 'action' => 'hide', 'usercanedit' => true,
-                'expectvisible' => true, 'errorexpected' => null, 'expectdescription' => '__SECTIONNAME__',
+                'mode' => 'section',
+                'action' => 'hide',
+                'usercanedit' => true,
+                'expectvisible' => true,
+                'errorexpected' => null,
+                'expectdescription' => '__SECTIONNAME__',
             ],
             'section_error_when_hidden_without_editing' => [
                 // Section is hidden; viewer cannot see hidden sections, so error message is shown.
-                'mode' => 'section', 'action' => 'hide', 'usercanedit' => false,
-                'expectvisible' => false, 'errorexpected' => 'errorsectionnotavailable', 'expectdescription' => null,
+                'mode' => 'section',
+                'action' => 'hide',
+                'usercanedit' => false,
+                'expectvisible' => false,
+                'errorexpected' => 'errorsectionnotavailable',
+                'expectdescription' => null,
             ],
             'section_error_when_deleted_with_editing' => [
                 // Section is deleted; even editors see the error message.
-                'mode' => 'section', 'action' => 'delete', 'usercanedit' => true,
-                'expectvisible' => false, 'errorexpected' => 'errorsectionnotavailable', 'expectdescription' => null,
+                'mode' => 'section',
+                'action' => 'delete',
+                'usercanedit' => true,
+                'expectvisible' => false,
+                'errorexpected' => 'errorsectionnotavailable',
+                'expectdescription' => null,
             ],
             'section_error_when_deleted_without_editing' => [
                 // Section is deleted; viewers see the error message.
-                'mode' => 'section', 'action' => 'delete', 'usercanedit' => false,
-                'expectvisible' => false, 'errorexpected' => 'errorsectionnotavailable', 'expectdescription' => null,
+                'mode' => 'section',
+                'action' => 'delete',
+                'usercanedit' => false,
+                'expectvisible' => false,
+                'errorexpected' => 'errorsectionnotavailable',
+                'expectdescription' => null,
             ],
         ];
     }
