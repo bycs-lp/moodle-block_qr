@@ -14,19 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Version details
- *
- * @package    block_qr
- * @copyright  2023 ISB Bayern
- * @author     Florian Dagner <florian.dagner@outlook.de>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->release = 'v0.0.1';
-$plugin->version   = 2026031600;         // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2022041200;         // Requires this Moodle version.
-$plugin->component = 'block_qr';         // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_BETA;      // This is considered as ready for production sites.
+/**
+ * Handles upgrading this block.
+ *
+ * @param int $oldversion
+ * @param stdClass $block
+ * @return bool
+ * @throws downgrade_exception
+ * @throws dml_exception
+ * @throws upgrade_exception
+ */
+function xmldb_block_qr_upgrade($oldversion, $block): bool {
+    global $CFG;
+
+    require_once($CFG->dirroot . '/blocks/qr/db/upgradelib.php');
+
+    if ($oldversion < 2026031600) {
+        block_qr_migrate_section_num_to_id();
+        upgrade_block_savepoint(true, 2026031600, 'qr');
+    }
+
+    return true;
+}

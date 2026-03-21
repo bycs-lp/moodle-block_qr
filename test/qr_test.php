@@ -53,6 +53,7 @@ final class qr_test extends \advanced_testcase {
 
         require_once($CFG->dirroot . '/lib/blocklib.php');
         require_once($CFG->dirroot . '/course/lib.php');
+        require_once($CFG->dirroot . '/blocks/qr/db/upgradelib.php');
 
         $modinfo = get_fast_modinfo($this->course->id);
         $sectioninfo = $modinfo->get_section_info(1);
@@ -532,6 +533,116 @@ final class qr_test extends \advanced_testcase {
     }
 
     /**
+     * Tests migration of legacy section-number config for a course-context block.
+     */
+    public function test_migrate_section_num_to_id_for_course_context(): void {
+        $blockid = $this->create_persisted_block_instance(
+            \context_course::instance($this->course->id),
+            [
+                'options' => 'internalcontent',
+                'internal' => 'section=' . $this->sectionnum,
+            ]
+        );
+
+        $this->assertSame(1, block_qr_migrate_section_num_to_id());
+
+        $config = $this->load_persisted_block_config($blockid);
+        $this->assertSame('section=' . $this->sectionid, $config->internal);
+    }
+
+    /**
+     * Tests migration of legacy section-number config for a module-context block.
+     */
+    public function test_migrate_section_num_to_id_for_module_context(): void {
+        $blockid = $this->create_persisted_block_instance(
+            \context_module::instance($this->cmid),
+            [
+                'options' => 'internalcontent',
+                'internal' => 'section=' . $this->sectionnum,
+            ]
+        );
+
+        $this->assertSame(1, block_qr_migrate_section_num_to_id());
+
+        $config = $this->load_persisted_block_config($blockid);
+        $this->assertSame('section=' . $this->sectionid, $config->internal);
+    }
+
+    /**
+     * Tests migration leaves already migrated section ids untouched.
+     */
+    public function test_migrate_section_num_to_id_skips_already_migrated_config(): void {
+        $blockid = $this->create_persisted_block_instance(
+            \context_course::instance($this->course->id),
+            [
+                'options' => 'internalcontent',
+                'internal' => 'section=' . $this->sectionid,
+            ]
+        );
+
+        $this->assertSame(0, block_qr_migrate_section_num_to_id());
+
+        $config = $this->load_persisted_block_config($blockid);
+        $this->assertSame('section=' . $this->sectionid, $config->internal);
+    }
+
+    /**
+     * Tests migration skips unknown legacy section numbers.
+     */
+    public function test_migrate_section_num_to_id_skips_unknown_section(): void {
+        $blockid = $this->create_persisted_block_instance(
+            \context_course::instance($this->course->id),
+            [
+                'options' => 'internalcontent',
+                'internal' => 'section=99',
+            ]
+        );
+
+        $this->assertSame(0, block_qr_migrate_section_num_to_id());
+
+        $config = $this->load_persisted_block_config($blockid);
+        $this->assertSame('section=99', $config->internal);
+    }
+
+    /**
+     * Tests migration skips blocks that are not using internalcontent mode.
+     */
+    public function test_migrate_section_num_to_id_skips_non_internalcontent_block(): void {
+        $blockid = $this->create_persisted_block_instance(
+            \context_course::instance($this->course->id),
+            [
+                'options' => 'currenturl',
+                'internal' => 'section=' . $this->sectionnum,
+            ]
+        );
+
+        $this->assertSame(0, block_qr_migrate_section_num_to_id());
+
+        $config = $this->load_persisted_block_config($blockid);
+        $this->assertSame('section=' . $this->sectionnum, $config->internal);
+    }
+
+    /**
+     * Tests migration skips blocks whose parent context no longer exists.
+     */
+    public function test_migrate_section_num_to_id_skips_orphaned_block(): void {
+        global $DB;
+
+        $blockid = $this->create_persisted_block_instance(
+            \context_course::instance($this->course->id),
+            [
+                'options' => 'internalcontent',
+                'internal' => 'section=' . $this->sectionnum,
+            ]
+        );
+
+        // Break the parent context so the block becomes an orphan.
+        $DB->set_field('block_instances', 'parentcontextid', 999999, ['id' => $blockid]);
+
+        $this->assertSame(0, block_qr_migrate_section_num_to_id());
+    }
+
+    /**
      * Creates a QR block instance with the provided config.
      *
      * @param array $config Configuration data to apply
@@ -559,5 +670,41 @@ final class qr_test extends \advanced_testcase {
         $block->page = $PAGE;
         $block->context = $context;
         return $block;
+    }
+
+    /**
+     * Creates a persisted block instance for migration tests.
+     *
+     * @param \context $parentcontext Parent context of the block
+     * @param array $config Configuration data
+     * @return int
+     */
+    private function create_persisted_block_instance(\context $parentcontext, array $config): int {
+        global $DB, $PAGE;
+
+        $PAGE->set_course($this->course);
+        $PAGE->set_context($parentcontext);
+        $PAGE->set_url(new \moodle_url('/course/view.php', ['id' => $this->course->id]));
+
+        $record = self::getDataGenerator()->create_block('qr', ['parentcontextid' => $parentcontext->id]);
+        $block = block_instance('qr', $record, $PAGE);
+        $block->instance_config_save((object) $config);
+
+        return (int) $DB->get_field('block_instances', 'id', ['id' => $record->id], MUST_EXIST);
+    }
+
+    /**
+     * Loads a persisted block config through the Moodle block API.
+     *
+     * @param int $blockid Block instance id
+     * @return \stdClass
+     */
+    private function load_persisted_block_config(int $blockid): \stdClass {
+        global $DB, $PAGE;
+
+        $record = $DB->get_record('block_instances', ['id' => $blockid], '*', MUST_EXIST);
+        $block = block_instance('qr', $record, $PAGE);
+
+        return $block->config;
     }
 }
