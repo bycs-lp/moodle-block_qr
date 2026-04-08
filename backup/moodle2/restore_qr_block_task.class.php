@@ -103,8 +103,8 @@ class restore_qr_block_task extends restore_block_task {
             $config->owncontent = $decoder->decode_content($config->owncontent);
 
             if (isset($config->internal)) {
-                // config->internal stores mode-specific data as "type=value" (e.g. "cmid=42", "section=3").
-                // explode(..., 2) splits on the first "=" only; array_pad ensures both $type and $id are always set.
+                // The internal config stores mode-specific data as "type=value" (e.g. "cmid=42", "section=3").
+                // Splitting on the first "=" only; array_pad ensures both $type and $id are always set.
                 [$type, $id] = array_pad(
                     explode('=', (string) $config->internal, 2),
                     2,
