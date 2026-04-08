@@ -17,7 +17,8 @@
 namespace block_qr\output;
 
 /**
- * Class mode_owncontent
+ * Renders a QR code from user-defined content (plain text or URL).
+ *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein

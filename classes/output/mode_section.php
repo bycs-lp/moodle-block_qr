@@ -20,7 +20,8 @@ use core_course\modinfo;
 use moodle_url;
 
 /**
- * Class mode_section
+ * Renders a QR code and link pointing to a course section.
+ *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
@@ -44,9 +45,7 @@ class mode_section implements \renderable, \templatable {
     public function export_for_template($output): array {
         $sectioninfo = null;
         try {
-            if (method_exists($this->modinfo, 'get_section_info_by_id')) {
-                $sectioninfo = $this->modinfo->get_section_info_by_id($this->sectionid);
-            }
+            $sectioninfo = $this->modinfo->get_section_info_by_id($this->sectionid);
         } catch (\Throwable $t) {
             $sectioninfo = null;
         }

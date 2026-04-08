@@ -17,7 +17,8 @@
 namespace block_qr\output;
 
 /**
- * Class mode_geolocation
+ * Renders a QR code containing geographic coordinates (geo: URI scheme).
+ *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein

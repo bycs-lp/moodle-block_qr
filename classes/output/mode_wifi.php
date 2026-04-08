@@ -17,7 +17,8 @@
 namespace block_qr\output;
 
 /**
- * Class mode_wifi
+ * Renders a QR code containing Wi-Fi network credentials (WPA/WEP/open).
+ *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein

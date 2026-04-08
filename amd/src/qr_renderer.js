@@ -22,9 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/* global QRCode */
-
 import Modal from 'core/modal';
+import Log from 'core/log';
+
+/* global QRCode */
 
 /**
  * Initialises QR rendering for one block instance.
@@ -50,7 +51,7 @@ export const init = (id, content, description) => {
         btn.addEventListener('click', () => {
             Modal.create({title: description, body: svg})
                 .then(m => m.show())
-                .catch(window.console.error);
+                .catch(e => Log.error(e));
         });
     }
 };

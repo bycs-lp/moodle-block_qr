@@ -21,7 +21,7 @@ use moodle_url;
 use core\exception\moodle_exception;
 
 /**
- * Class mode_cmid
+ * Renders a QR code and link pointing to a course module (activity instance).
  *
  * @package     block_qr
  * @copyright   2025 ISB Bayern

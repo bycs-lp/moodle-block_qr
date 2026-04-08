@@ -17,7 +17,8 @@
 namespace block_qr\output;
 
 /**
- * Class mode_currenturl
+ * Renders a QR code pointing to the current page URL.
+ *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein

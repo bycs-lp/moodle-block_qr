@@ -42,11 +42,11 @@ final class qr_test extends \advanced_testcase {
      * Setup test environment
      */
     protected function setUp(): void {
+        global $CFG;
+
         parent::setUp();
         $this->resetAfterTest(true);
         date_default_timezone_set('UTC');
-
-        global $CFG;
 
         $gen = self::getDataGenerator();
         $this->course = $gen->create_course(['format' => 'topics']);
@@ -97,6 +97,8 @@ final class qr_test extends \advanced_testcase {
         $PAGE->set_course($this->course);
         $PAGE->set_url($pageurl);
 
+        // The data provider uses symbolic placeholders (e.g. __CMID__) instead of real IDs,
+        // because the actual IDs are only known after setUp() runs. Replace them here.
         $replacements = [
             '__COURSEID__' => (string)$this->course->id,
             '__SECTIONID__' => (string)$this->sectionid,
@@ -268,6 +270,8 @@ final class qr_test extends \advanced_testcase {
         $this->setUser($this->teacher);
         $USER->editing = 1;
 
+        // Perform the action on the target (cmid or section) before rendering the block.
+        // Possible actions: 'none' (no change), 'move' (to another section), 'hide', 'delete'.
         if ($mode === 'cmid') {
             if ($action === 'move') {
                 $modinfo = get_fast_modinfo($this->course->id);

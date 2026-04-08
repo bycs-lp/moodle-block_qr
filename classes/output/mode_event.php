@@ -17,7 +17,8 @@
 namespace block_qr\output;
 
 /**
- * Class mode_event
+ * Renders a QR code containing a calendar event (VCALENDAR/VEVENT format).
+ *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein

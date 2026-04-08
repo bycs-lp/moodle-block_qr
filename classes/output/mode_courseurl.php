@@ -19,7 +19,8 @@ namespace block_qr\output;
 use moodle_url;
 
 /**
- * Class mode_courseurl
+ * Renders a QR code and link pointing to the course start page.
+ *
  * @package     block_qr
  * @copyright   2025 ISB Bayern
  * @author      Thomas Schönlein
