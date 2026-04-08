@@ -14,7 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * Upgrade library for block_qr.
+ *
+ * @package    block_qr
+ * @copyright  2026 ISB Bayern
+ * @author     Thomas Schönlein
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 /**
  * Migrates legacy section-number based internal links to section ids.
@@ -65,6 +72,7 @@ function block_qr_migrate_section_num_to_id(): int {
 /**
  * Resolves the course id for a block instance parent context.
  *
+ * @package    block_qr
  * @param stdClass $instance Block instance record
  * @return ?int
  * @throws dml_exception
@@ -72,7 +80,7 @@ function block_qr_migrate_section_num_to_id(): int {
 function block_qr_get_courseid_for_block_instance(stdClass $instance): ?int {
     global $DB;
 
-    $parentcontext = context::instance_by_id($instance->parentcontextid, IGNORE_MISSING);
+    $parentcontext = \core\context::instance_by_id($instance->parentcontextid, IGNORE_MISSING);
     if (!$parentcontext) {
         return null;
     }
@@ -94,6 +102,7 @@ function block_qr_get_courseid_for_block_instance(stdClass $instance): ?int {
  *
  * Already migrated section ids are left untouched.
  *
+ * @package    block_qr
  * @param int $courseid Course id
  * @param int $storedvalue Stored section reference
  * @return ?int

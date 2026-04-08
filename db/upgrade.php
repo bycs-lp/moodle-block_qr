@@ -14,7 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * Upgrade script for block_qr.
+ *
+ * @package    block_qr
+ * @copyright  2026 ISB Bayern
+ * @author     Thomas Schönlein
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 /**
  * Handles upgrading this block.
