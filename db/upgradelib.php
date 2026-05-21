@@ -41,29 +41,34 @@ function block_qr_migrate_section_num_to_id(): int {
     $instances = $DB->get_records('block_instances', ['blockname' => 'qr']);
 
     foreach ($instances as $instance) {
-        $courseid = block_qr_get_courseid_for_block_instance($instance);
-        if ($courseid === null) {
-            continue;
-        }
+        try {
+            $courseid = block_qr_get_courseid_for_block_instance($instance);
+            if ($courseid === null) {
+                continue;
+            }
 
-        $block = block_instance('qr', $instance, $page);
-        if (
-            empty($block->config->options)
-            || $block->config->options !== 'internalcontent'
-            || empty($block->config->internal)
-            || !preg_match('/^section=(\d+)$/', (string) $block->config->internal, $matches)
-        ) {
-            continue;
-        }
+            $block = block_instance('qr', $instance, $page);
+            if (
+                empty($block->config->options)
+                || $block->config->options !== 'internalcontent'
+                || empty($block->config->internal)
+                || !preg_match('/^section=(\d+)$/', (string) $block->config->internal, $matches)
+            ) {
+                continue;
+            }
 
-        $sectionid = block_qr_get_migrated_section_id($courseid, (int) $matches[1]);
-        if ($sectionid === null || $sectionid === (int) $matches[1]) {
-            continue;
-        }
+            $sectionid = block_qr_get_migrated_section_id($courseid, (int) $matches[1]);
+            if ($sectionid === null || $sectionid === (int) $matches[1]) {
+                continue;
+            }
 
-        $block->config->internal = 'section=' . $sectionid;
-        $block->instance_config_save($block->config);
-        $updated++;
+            $block->config->internal = 'section=' . $sectionid;
+            $block->instance_config_save($block->config);
+            $updated++;
+        } catch (\Exception $e) {
+            debugging('block_qr: Failed to migrate instance ' . $instance->id . ': ' . $e->getMessage(),
+                DEBUG_DEVELOPER);
+        }
     }
 
     return $updated;
