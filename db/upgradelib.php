@@ -66,8 +66,10 @@ function block_qr_migrate_section_num_to_id(): int {
             $block->instance_config_save($block->config);
             $updated++;
         } catch (\Exception $e) {
-            debugging('block_qr: Failed to migrate instance ' . $instance->id . ': ' . $e->getMessage(),
-                DEBUG_DEVELOPER);
+            debugging(
+                'block_qr: Failed to migrate instance ' . $instance->id . ': ' . $e->getMessage(),
+                DEBUG_DEVELOPER
+            );
         }
     }
 
