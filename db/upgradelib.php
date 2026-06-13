@@ -35,6 +35,7 @@ function block_qr_migrate_section_num_to_id(): int {
 
     require_once($CFG->libdir . '/blocklib.php');
     require_once($CFG->libdir . '/pagelib.php');
+    require_once($CFG->libdir . '/upgradelib.php');
 
     $updated = 0;
     $page = $PAGE ?? new moodle_page();
@@ -66,9 +67,16 @@ function block_qr_migrate_section_num_to_id(): int {
             $block->instance_config_save($block->config);
             $updated++;
         } catch (\Exception $e) {
-            debugging(
-                'block_qr: Failed to migrate instance ' . $instance->id . ': ' . $e->getMessage(),
-                DEBUG_DEVELOPER
+            // A skip for expected cases is handled above via continue, so reaching
+            // this catch means a broken instance or a genuine migration failure.
+            // The upgrade step deliberately keeps going, so the error must not be
+            // silent: log it debug-independently into the upgrade_log table.
+            upgrade_log(
+                UPGRADE_LOG_ERROR,
+                'block_qr',
+                'Failed to migrate QR block instance ' . $instance->id,
+                $e->getMessage(),
+                $e->getTrace()
             );
         }
     }
