@@ -72,8 +72,8 @@ function block_qr_migrate_section_num_to_id(): int {
             // The upgrade step deliberately keeps going, so the error must not be
             // silent: show it on the upgrade page independent of debug mode.
             $notification = new \core\output\notification(
-                    'block_qr: Failed to migrate instance ' . $instance->id . ': ' . $e->getMessage(),
-                    \core\output\notification::NOTIFY_ERROR
+                'block_qr: Failed to migrate instance ' . $instance->id . ': ' . $e->getMessage(),
+                \core\output\notification::NOTIFY_ERROR
             );
             $notification->set_show_closebutton(false);
             echo $OUTPUT->render($notification);
