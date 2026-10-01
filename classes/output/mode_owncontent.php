@@ -37,7 +37,10 @@ class mode_owncontent implements \renderable, \templatable {
 
     #[\Override]
     public function export_for_template($output): array {
-        $isurl = filter_var($this->raw, FILTER_VALIDATE_URL) !== false;
+        // Only web links become a link target, FILTER_VALIDATE_URL also accepts javascript: URIs.
+        $scheme = strtolower((string) parse_url($this->raw, PHP_URL_SCHEME));
+        $isurl = in_array($scheme, ['http', 'https'], true)
+            && filter_var($this->raw, FILTER_VALIDATE_URL) !== false;
         return [
             'description' => '',
             'qrurl' => $isurl,
