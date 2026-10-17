@@ -16,6 +16,8 @@
 
 namespace block_qr\output;
 
+use moodle_url;
+
 /**
  * Renders a QR code containing geographic coordinates (geo: URI scheme).
  *
@@ -42,10 +44,10 @@ class mode_geolocation implements \renderable, \templatable {
     public function export_for_template($output): array {
         $geo = "geo:{$this->lat},{$this->lng}";
         $link = null;
-        if ($this->linktype === 'osm') {
-            $link = 'https://www.openstreetmap.org/?mlat=' . $this->lat
-                . '&mlon=' . $this->lng
-                . '#map=10/' . $this->lat . '/' . $this->lng;
+        if ($this->linktype === 'osm' && is_numeric($this->lat) && is_numeric($this->lng)) {
+            $url = new moodle_url('https://www.openstreetmap.org/', ['mlat' => $this->lat, 'mlon' => $this->lng]);
+            $url->set_anchor('map=10/' . $this->lat . '/' . $this->lng);
+            $link = $url->out(false);
         }
         return [
             'description' => get_string('geolocation', 'block_qr'),
