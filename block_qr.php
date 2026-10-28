@@ -201,7 +201,7 @@ class block_qr extends block_base {
         $this->page->requires->js_call_amd('block_qr/qr_renderer', 'init', [
             (string) $data['id'],
             $data['qrcodecontent'] ?? '',
-            $data['description'] ?? '',
+            format_string($data['description'] ?? '', true, ['context' => $this->context]),
         ]);
         return $this->content;
     }
